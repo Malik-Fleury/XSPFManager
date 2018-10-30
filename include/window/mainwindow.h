@@ -2,12 +2,11 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QtWidgets>
+#include "ui_mainwindow.h"
+#include "include/tools/xspf.h"
 
-namespace Ui {
-class MainWindow;
-}
-
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, private Ui::MainWindow
 {
     Q_OBJECT
 
@@ -16,7 +15,6 @@ public:
     ~MainWindow();
 
 private:
-    Ui::MainWindow *ui;
 };
 
 #endif // MAINWINDOW_H
