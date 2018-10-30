@@ -105,16 +105,3 @@ void Xspf::savePlaylist(QString filePath, Playlist& playlist)
 
     newDoc.save_file(filePath.toStdString().c_str());
 }
-
-//    if(result)
-//    {
-//        pugi::xpath_node xNode = doc.select_node("/playlist/trackList/track[1]/title");
-//        pugi::xpath_node_set xSet = doc.select_nodes("/playlist/trackList/track[1]/title");
-//        qDebug() << xSet.size();
-//        qDebug() << xSet.first().node().text().as_string();
-//        qDebug() << xNode.node().text().as_string();
-//    }
-//    else
-//    {
-//        qDebug() << result.description();
-//    }
