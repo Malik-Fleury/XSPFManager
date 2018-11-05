@@ -4,7 +4,7 @@ using namespace pugi;
 
 Xspf::Xspf()
 {
-    doc = nullptr;
+    doc = new xml_document();
 }
 
 Xspf::Xspf(QString& filePath)
@@ -20,7 +20,6 @@ Xspf::~Xspf()
 
 void Xspf::open(QString& filePath)
 {
-    doc = new xml_document();
     xml_parse_result result = doc->load_file(filePath.toStdString().c_str());
 
     if(!result)
