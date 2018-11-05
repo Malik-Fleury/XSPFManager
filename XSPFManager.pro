@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui xmlpatterns
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,10 +25,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         src/main.cpp \
-        src/window/mainwindow.cpp
+        src/window/mainwindow.cpp \
+    src/data/track.cpp \
+    src/data/playlist.cpp \
+    src/tools/xspf.cpp
 
 HEADERS += \
-    include/window/mainwindow.h
+    include/window/mainwindow.h \
+    include/data/track.h \
+    include/data/playlist.h \
+    include/tools/xspf.h
 
 FORMS += \
     res/window/mainwindow.ui
+
+unix|win32: LIBS += -L$$PWD/lib/pugixml-1.9/bin/ -lpugixml
+
+INCLUDEPATH += $$PWD/lib/pugixml-1.9/include
+DEPENDPATH += $$PWD/lib/pugixml-1.9/include
+
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/pugixml-1.9/bin/pugixml.lib
+else:unix|win32-g++: PRE_TARGETDEPS += $$PWD/lib/pugixml-1.9/bin/libpugixml.a
