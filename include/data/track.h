@@ -16,7 +16,7 @@ public:
     void showDebugData();
     QString getDataFromKey(QString& key);
 
-   QMap<QString, QString>::key_iterator getConstBegin();
+    QMap<QString, QString>::key_iterator getConstBegin();
     QMap<QString, QString>::key_iterator getConstEnd();
 
 private:
