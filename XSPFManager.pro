@@ -28,13 +28,15 @@ SOURCES += \
         src/window/mainwindow.cpp \
     src/data/track.cpp \
     src/data/playlist.cpp \
-    src/tools/xspf.cpp
+    src/tools/xspf.cpp \
+    src/data/playlistmodel.cpp
 
 HEADERS += \
     include/window/mainwindow.h \
     include/data/track.h \
     include/data/playlist.h \
-    include/tools/xspf.h
+    include/tools/xspf.h \
+    include/data/playlistmodel.h
 
 FORMS += \
     res/window/mainwindow.ui

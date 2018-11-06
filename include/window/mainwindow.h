@@ -5,6 +5,7 @@
 #include <QtWidgets>
 #include "ui_mainwindow.h"
 #include "include/tools/xspf.h"
+#include "include/data/playlistmodel.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -16,6 +17,7 @@ public:
 
 private:
     void setupMenuActions();
+    void setupPlaylistTable();
 
     void newFile();
     void open();

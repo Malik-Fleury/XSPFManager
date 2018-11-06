@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     setupUi(this);
     setupMenuActions();
+    setupPlaylistTable();
 
     xspf = nullptr;
     path = "";
@@ -39,6 +40,17 @@ void MainWindow::setupMenuActions()
     connect(menuHelpAbout, &QAction::triggered, this, &MainWindow::about);
 }
 
+void MainWindow::setupPlaylistTable()
+{
+    PlaylistModel* model = new PlaylistModel(this);
+    this->playlistTableView->setModel(model);
+
+    this->playlistTableView->horizontalHeader()->setSectionsMovable(true);
+    this->playlistTableView->verticalHeader()->setSectionsMovable(true);
+
+    this->playlistTableView->verticalHeader()->setDragDropMode(QAbstractItemView::InternalMove);
+    this->playlistTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
 
 void MainWindow::newFile()
 {
