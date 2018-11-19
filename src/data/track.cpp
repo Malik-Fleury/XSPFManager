@@ -20,14 +20,19 @@ QString Track::getFilename()
     return this->fileInfo.fileName();
 }
 
-QString Track::getAbsolutePath()
+QString Track::getAbsoluteFilePath()
 {
     return this->fileInfo.absoluteFilePath();
 }
 
-QString Track::getRelativePath(QDir& baseUriDir)
+QString Track::getAbsolutePath()
 {
-    return baseUriDir.relativeFilePath(this->getAbsolutePath());
+    return this->fileInfo.absolutePath();
+}
+
+QString Track::getRelativeFilePath(QDir& absolutePathDir)
+{
+    return absolutePathDir.relativeFilePath(this->getFilename());
 }
 
 QString Track::generateAbsolutePath(QString baseUri, QString relativePath)
