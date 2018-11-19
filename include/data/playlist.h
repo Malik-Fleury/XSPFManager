@@ -11,6 +11,7 @@ public:
     Playlist(QString baseUri, QList<Track*>* tracksList);
     ~Playlist();
 
+    QDir getBaseUriDir();
     QString getBaseUri();
     Track* getTrack(int id);
 
@@ -22,7 +23,7 @@ private:
     void freeTrackMemory();
 
 private:
-    QString baseUri;
+    QDir baseUriDir;
     QList<Track*>* tracksList;
 };
 
