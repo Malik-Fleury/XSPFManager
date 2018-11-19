@@ -23,7 +23,7 @@ private:
     void addFileTag(QString& path);
 
     QString getBaseUri();
-    QList<Track*>* getTracks(QString& baseUri);
+    QList<Track*>* getTracks(QString& filePat);
 
 private:
     QFileInfo fileInfo;

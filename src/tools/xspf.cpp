@@ -65,7 +65,7 @@ QString Xspf::getBaseUri()
     return baseUri;
 }
 
-QList<Track*>* Xspf::getTracks(QString& baseUri)
+QList<Track*>* Xspf::getTracks(QString& filePath)
 {
     QList<Track*>* tracksList = new QList<Track*>();
     xpath_node_set trackXPathNodesSet= doc->select_nodes("/playlist/trackList/track");
@@ -80,19 +80,10 @@ QList<Track*>* Xspf::getTracks(QString& baseUri)
         // Remove the tag "File:///"
         removeFileTag(location);
 
-        if(!baseUri.isEmpty())
-            track = new Track(baseUri, location);
+        if(!filePath.isEmpty())
+            track = new Track(filePath, location);
         else
             track = new Track(location);
-
-        /*
-        for(xml_node childNode : trackNode.children())
-        {
-            QString key = childNode.name();
-            QString data = childNode.text().as_string();
-            track->addData(key, data);
-        }
-        */
 
         tracksList->append(track);
     }
@@ -102,52 +93,48 @@ QList<Track*>* Xspf::getTracks(QString& baseUri)
 
 void Xspf::savePlaylist(QString filePath, Playlist& playlist)
 {
+    QFileInfo fileDestInfo(filePath);
     xml_document newDoc;
 
+    // Declare the root node with the version and the encoding of the XML file
     xml_node declaration = newDoc.prepend_child(pugi::node_declaration);
     declaration.append_attribute("version") = "1.0";
     declaration.append_attribute("encoding") = "UTF-8";
 
+    // Add the playlist node and add the XML BASE attribute if the playlist contains an URI
     xml_node playlistNode = newDoc.append_child("playlist");
-    if(playlist.getBaseUri() != ".")
+    if(playlist.existsBaseUri()")
     {
         QString uriBase = playlist.getBaseUri();
         addFileTag(uriBase);
         playlistNode.append_attribute("xml:base").set_value(uriBase.toStdString().c_str());
     }
+    // Add attributes concerning the version of XSPF
     playlistNode.append_attribute("version").set_value("1");
     playlistNode.append_attribute("xmlns").set_value("http://xspf.org/ns/0/");
 
+    // Create nodes for each tracks
     xml_node tracklistNode = playlistNode.append_child("trackList");
-
     for(auto itrTrack = playlist.getConstBegin(); itrTrack != playlist.getConstEnd(); itrTrack++)
     {
         Track* track = (Track*)*itrTrack;
         xml_node trackNode = tracklistNode.append_child("track");
-
         xml_node dataNode = trackNode.append_child("location");
-        if(playlist.getBaseUri() != ".")
+
+        // If we have an URI, the location is relative with base URI
+        if(playlist.existsBaseUri())
         {
-            QDir baseUriDir = playlist.getBaseUriDir();
-            dataNode.text().set(track->getRelativePath(baseUriDir).toStdString().c_str());
+            QDir absolutePathDir = fileDestInfo.absoluteDir().absolutePath();
+            QString relativePathToTrack = track->getRelativeFilePath(absolutePathDir);
+            dataNode.text().set(relativePathToTrack.toStdString().c_str());
         }
+        // Else we set the absolute path to the file
         else
         {
             QString absolutePath = track->getAbsolutePath();
             addFileTag(absolutePath);
             dataNode.text().set(absolutePath.toStdString().c_str());
         }
-
-        /*
-        for(auto itrTrackData = track->getConstBegin(); itrTrackData != track->getConstEnd(); itrTrackData++)
-        {
-            QString key(*itrTrackData);
-            QString dataTrack = track->getDataFromKey(key);
-
-            xml_node dataNode = trackNode.append_child(key.toStdString().c_str());
-            dataNode.text().set(dataTrack.toStdString().c_str());
-        }
-        */
     }
 
     newDoc.save_file(filePath.toStdString().c_str());
