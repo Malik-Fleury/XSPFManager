@@ -59,7 +59,8 @@ Playlist Xspf::readPlaylist()
 
 QString Xspf::getBaseUri()
 {
-    QString baseUri = doc->select_node("/playlist").node().attribute("xml:base").as_string();
+    xml_attribute baseUriAttribute = doc->select_node("/playlist").node().attribute("xml:base");
+    QString baseUri = baseUriAttribute.as_string();
     removeFileTag(baseUri);     // Remove the tag "File:///"
     return baseUri;
 }
@@ -108,7 +109,7 @@ void Xspf::savePlaylist(QString filePath, Playlist& playlist)
     declaration.append_attribute("encoding") = "UTF-8";
 
     xml_node playlistNode = newDoc.append_child("playlist");
-    if(!playlist.getBaseUri().isEmpty())
+    if(playlist.getBaseUri() != ".")
     {
         QString uriBase = playlist.getBaseUri();
         addFileTag(uriBase);
@@ -125,7 +126,7 @@ void Xspf::savePlaylist(QString filePath, Playlist& playlist)
         xml_node trackNode = tracklistNode.append_child("track");
 
         xml_node dataNode = trackNode.append_child("location");
-        if(!playlist.getBaseUri().isEmpty())
+        if(playlist.getBaseUri() != ".")
         {
             QDir baseUriDir = playlist.getBaseUriDir();
             dataNode.text().set(track->getRelativePath(baseUriDir).toStdString().c_str());
