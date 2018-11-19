@@ -2,7 +2,7 @@
 #define XSPFPLAYLIST_H
 
 #include <QtWidgets>
-#include "pugixml.hpp"
+#include "lib/pugixml-1.9/src/pugixml.hpp"
 
 #include "include/data/playlist.h"
 
