@@ -26,6 +26,11 @@ Track* Playlist::getTrack(int id)
     return tracksList->at(id);
 }
 
+bool Playlist::existsBaseUri()
+{
+    return this->getBaseUri() != ".";
+}
+
 QList<Track*>::const_iterator Playlist::getConstBegin()
 {
     return tracksList->constBegin();

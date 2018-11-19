@@ -14,6 +14,7 @@ public:
     QDir getBaseUriDir();
     QString getBaseUri();
     Track* getTrack(int id);
+    bool existsBaseUri();
 
     QList<Track*>::const_iterator getConstIterator();
     QList<Track*>::const_iterator getConstBegin();
