@@ -7,17 +7,12 @@ MainWindow::MainWindow(QWidget *parent) :
     setupMenuActions();
     setupPlaylistTable();
 
-    xspf = nullptr;
     path = "";
+    playlist = nullptr;
 }
 
 MainWindow::~MainWindow()
 {
-    // Delete the Xspf
-    if(xspf != nullptr)
-    {
-        delete xspf;
-    }
 }
 
 void MainWindow::setupMenuActions()
@@ -54,7 +49,8 @@ void MainWindow::setupPlaylistTable()
 
 void MainWindow::newFile()
 {
-    xspf = new Xspf();
+    this->freeMemoryPlaylist();
+    this->playlist = new Playlist();
 }
 
 void MainWindow::open()
@@ -63,8 +59,10 @@ void MainWindow::open()
 
     if(!fileToOpen.isEmpty())
     {
-        xspf = new Xspf(fileToOpen);
-        Playlist* playlist = xspf->readPlaylist();
+        xspf.open(fileToOpen);
+
+        this->freeMemoryPlaylist();
+        this->playlist = xspf.readPlaylist();
 
         // Add the data of the playlist to the table
     }
@@ -79,7 +77,7 @@ void MainWindow::save()
     }
 
     // Save the XSPF (need table)
-    //xspf->savePlaylist(this->path, /*playlist to save*/);
+    xspf.savePlaylist(this->path, *playlist);
 }
 
 void MainWindow::saveAs()
@@ -89,6 +87,7 @@ void MainWindow::saveAs()
     if(!fileToSave.isEmpty())
     {
         this->path = fileToSave;
+        this->save();
     }
 }
 
@@ -103,4 +102,13 @@ void MainWindow::redo()
 void MainWindow::about()
 {
     QMessageBox::about(this, "XSPF-Manager", "Auteur: Malik Fleury \nVersion: 1");
+}
+
+void MainWindow::freeMemoryPlaylist()
+{
+    if(this->playlist != nullptr)
+    {
+        delete playlist;
+        playlist = nullptr;
+    }
 }
