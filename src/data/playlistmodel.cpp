@@ -1,22 +1,14 @@
 #include "include/data/playlistmodel.h"
 
-PlaylistModel::PlaylistModel(QObject* parent)
+PlaylistModel::PlaylistModel(Playlist* playlist, QObject* parent)
     :QAbstractTableModel(parent)
 {
-    //    selectedCell = 0;
-    QTimer* timer = new QTimer(this);
-    timer->setInterval(1000);
-    connect(timer, SIGNAL(timeout()) , this, SLOT(timerHit()));
-    timer->start();
-
-    for(int i = 0;i < ROWS; i++)
-        for(int j = 0;j < COLS; j++)
-            m_gridData[i][j] = "Test";
+    this->playlist = playlist;
 }
 
 int PlaylistModel::rowCount(const QModelIndex& parent) const
 {
-    return ROWS;
+    return playlist->getNumberOfTracks();
 }
 
 int PlaylistModel::columnCount(const QModelIndex& parent) const
@@ -29,29 +21,23 @@ QVariant PlaylistModel::data(const QModelIndex& index, int role) const
     switch(role)
     {
         case Qt::DisplayRole:
-            if(index.column() == 0 && index.row() == 0)
             {
-                return QTime::currentTime().toString();
-            }
-            else
-            {
-                qDebug() << m_gridData[index.row()][index.column()];
-                return m_gridData[index.row()][index.column()];
-            }
-            break;
-        case Qt::FontRole:
-            if(index.column() == 0)
-            {
-                QFont boldFont;
-                boldFont.setBold(true);
-                return boldFont;
-            }
-            break;
-        case Qt::TextAlignmentRole:
+                int column = index.column();
+                int trackId = index.row();
+                Track* track = playlist->getTrack(trackId);
 
-            if (index.column() == 0)
-            {
-                return Qt::AlignHCenter;
+                switch(column)
+                {
+                    case FILENAME_COL:
+                        return track->getFilename();
+                        break;
+                    case ABSOLUTE_PATH_COL:
+                        return track->getAbsoluteFilePath();
+                        break;
+                    case RELATIVE_PATH_COL:
+                        return track->getAbsoluteFilePath();
+                        break;
+                }
             }
             break;
     }
@@ -67,11 +53,11 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int
         {
             switch(section)
             {
-                case 0:
+                case FILENAME_COL:
                     return QString("Filename");
-                case 1:
+                case ABSOLUTE_PATH_COL:
                     return QString("Absolute");
-                case 2:
+                case RELATIVE_PATH_COL:
                     return QString("Relative");
             }
         }
@@ -82,22 +68,10 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int
 
 bool PlaylistModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
-    if (role == Qt::EditRole)
-    {
-        //save value from editor to member m_gridData
-        m_gridData[index.row()][index.column()] = value.toString();
-    }
-
     return true;
 }
 
 Qt::ItemFlags PlaylistModel::flags(const QModelIndex& index) const
 {
-    return Qt::ItemIsSelectable |  Qt::ItemIsEditable | Qt::ItemIsEnabled;
-}
-
-void PlaylistModel::timerHit()
-{
-    QModelIndex topLeft = createIndex(0,0);
-    emit dataChanged(topLeft, topLeft);
+    return Qt::ItemIsSelectable /*|  Qt::ItemIsEditable*/ | Qt::ItemIsEnabled;
 }

@@ -30,7 +30,8 @@ SOURCES += \
     src/data/playlist.cpp \
     src/tools/xspf.cpp \
     src/data/playlistmodel.cpp \
-    lib/pugixml-1.9/src/pugixml.cpp
+    lib/pugixml-1.9/src/pugixml.cpp \
+    src/widgets/playlisttable.cpp
 
 HEADERS += \
     include/window/mainwindow.h \
@@ -39,7 +40,8 @@ HEADERS += \
     include/tools/xspf.h \
     include/data/playlistmodel.h \
     lib/pugixml-1.9/src/pugixml.hpp \
-    lib/pugixml-1.9/src/pugiconfig.hpp
+    lib/pugixml-1.9/src/pugiconfig.hpp \
+    include/widgets/playlisttable.h
 
 FORMS += \
     res/window/mainwindow.ui

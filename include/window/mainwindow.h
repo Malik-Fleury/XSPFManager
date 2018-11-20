@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtWidgets>
+#include "include/widgets/playlisttable.h"
 #include "ui_mainwindow.h"
 #include "include/tools/xspf.h"
 #include "include/data/playlistmodel.h"
@@ -17,7 +18,9 @@ public:
 
 private:
     void setupMenuActions();
+    void setupOtherEvents();
     void setupPlaylistTable();
+    void setupPlaylistTableModel();
 
     void newFile();
     void open();
@@ -31,10 +34,14 @@ private:
 
     void freeMemoryPlaylist();
 
+private slots:
+    void dropEventHandler(QDropEvent* event);
+
 private:
+    PlaylistTable* playlistTable;
+
     Xspf xspf;
     QString path;
-
     Playlist* playlist;
 };
 
