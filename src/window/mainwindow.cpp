@@ -64,7 +64,7 @@ void MainWindow::open()
     if(!fileToOpen.isEmpty())
     {
         xspf = new Xspf(fileToOpen);
-        Playlist playlist = xspf->readPlaylist();
+        Playlist* playlist = xspf->readPlaylist();
 
         // Add the data of the playlist to the table
     }

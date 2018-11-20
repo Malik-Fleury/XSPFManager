@@ -1,14 +1,23 @@
 #include "include/data/playlist.h"
 
-Playlist::Playlist(QString baseUri, QList<Track*>* tracksList): baseUriDir(baseUri)
+Playlist::Playlist(QString baseUri): baseUriDir(baseUri), tracksList()
 {
-    this->tracksList = tracksList;
+}
+
+Playlist::Playlist(Playlist& playlistSource)
+{
+    Playlist(playlistSource.baseUriDir.absolutePath());
+
+    for(auto itrTrack = playlistSource.getConstBegin(); itrTrack != playlistSource.getConstEnd(); itrTrack++)
+    {
+        Track* track = (Track*)*itrTrack;
+        this->tracksList.append(track);
+    }
 }
 
 Playlist::~Playlist()
 {
     freeTrackMemory();
-    delete tracksList;
 }
 
 QString Playlist::getBaseUri()
@@ -21,26 +30,41 @@ QDir Playlist::getBaseUriDir()
     return this->baseUriDir;
 }
 
+void Playlist::addTrack(Track* track)
+{
+    this->tracksList.append(track);
+}
+
 Track* Playlist::getTrack(int id)
 {
-    return tracksList->at(id);
+    return tracksList.at(id);
+}
+
+void Playlist::removeTrack(Track* track)
+{
+    this->tracksList.removeOne(track);
+}
+
+bool Playlist::existsBaseUri()
+{
+    return this->getBaseUri() != ".";
 }
 
 QList<Track*>::const_iterator Playlist::getConstBegin()
 {
-    return tracksList->constBegin();
+    return tracksList.constBegin();
 }
 
 QList<Track*>::const_iterator Playlist::getConstEnd()
 {
-    return tracksList->constEnd();
+    return tracksList.constEnd();
 }
 
 void Playlist::freeTrackMemory()
 {
-    for(int i = 0; i < tracksList->size(); i++)
+    for(int i = 0; i < tracksList.size(); i++)
     {
-        Track* track = tracksList->at(i);
+        Track* track = tracksList.at(i);
         delete track;
     }
 }
