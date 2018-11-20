@@ -1,8 +1,7 @@
 #include "include/data/playlist.h"
 
-Playlist::Playlist(QString baseUri, QList<Track*>* tracksList)
+Playlist::Playlist(QString baseUri, QList<Track*>* tracksList): baseUriDir(baseUri)
 {
-    this->baseUri = baseUri;
     this->tracksList = tracksList;
 }
 
@@ -12,11 +11,14 @@ Playlist::~Playlist()
     delete tracksList;
 }
 
-
-
 QString Playlist::getBaseUri()
 {
-    return this->baseUri;
+    return this->getBaseUriDir().path();
+}
+
+QDir Playlist::getBaseUriDir()
+{
+    return this->baseUriDir;
 }
 
 Track* Playlist::getTrack(int id)

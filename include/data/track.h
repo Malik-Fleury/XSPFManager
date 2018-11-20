@@ -4,23 +4,31 @@
 #include <QString>
 #include <QMap>
 #include <QList>
+#include <QDir>
+#include <QFileInfo>
 #include <QDebug>
 
 class Track
 {
 public:
-    Track();
-    ~Track();
+    Track(QString absoluePath);
+    Track(QString uriBase, QString relativePath);
+    virtual ~Track();
 
-    void addData(QString key, QString data);
-    void showDebugData();
-    QString getDataFromKey(QString& key);
+    QString getFilename();
+    QString getAbsolutePath();
+    QString getRelativePath(QDir& baseUriDir);
 
-    QMap<QString, QString>::key_iterator getConstBegin();
-    QMap<QString, QString>::key_iterator getConstEnd();
+    static QString generateAbsolutePath(QString baseUri, QString relativePath);
+
+    //void addData(QString key, QString data);
+    //QString getDataFromKey(QString& key);
+    //QMap<QString, QString>::key_iterator getConstBegin();
+    //7QMap<QString, QString>::key_iterator getConstEnd();
 
 private:
-    QMap<QString, QString>* dataMap;
+    QFileInfo fileInfo;
+    //QMap<QString, QString>* dataMap;
 };
 
 #endif // TRACK_H
