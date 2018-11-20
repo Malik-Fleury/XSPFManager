@@ -29,10 +29,13 @@ private:
 
     void about();
 
-private:
-    Xspf* xspf;
+    void freeMemoryPlaylist();
 
+private:
+    Xspf xspf;
     QString path;
+
+    Playlist* playlist;
 };
 
 #endif // MAINWINDOW_H
