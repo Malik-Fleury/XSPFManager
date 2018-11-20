@@ -62,9 +62,9 @@ QList<Track*>::const_iterator Playlist::getConstEnd()
 
 void Playlist::freeTrackMemory()
 {
-    for(int i = 0; i < tracksList.size(); i++)
+    while(!tracksList.empty())
     {
-        Track* track = tracksList.at(i);
+        Track* track =tracksList.takeLast();
         delete track;
     }
 }
