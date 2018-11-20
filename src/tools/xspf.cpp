@@ -22,6 +22,7 @@ Xspf::~Xspf()
 
 void Xspf::open(QString filePath)
 {
+    doc.reset();
     xml_parse_result result = doc.load_file(filePath.toStdString().c_str());
 
     if(!result)
