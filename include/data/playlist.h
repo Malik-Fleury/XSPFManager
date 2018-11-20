@@ -17,6 +17,7 @@ public:
     void addTrack(Track* track);
     Track* getTrack(int id);
     void removeTrack(Track* track);
+    int getNumberOfTracks();
     bool existsBaseUri();
 
     QList<Track*>::const_iterator getConstIterator();
