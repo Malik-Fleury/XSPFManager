@@ -2,7 +2,7 @@
 
 using namespace pugi;
 
-Xspf::Xspf(): doc(nullptr)
+Xspf::Xspf()
 {
 }
 
@@ -11,27 +11,22 @@ Xspf::Xspf(QString filePath): fileInfo(filePath)
     open(filePath);
 }
 
+Xspf::Xspf(Xspf& xspfSource)
+{
+    this->fileInfo = xspfSource.fileInfo;
+}
+
 Xspf::~Xspf()
 {
-    close();
 }
 
 void Xspf::open(QString filePath)
 {
-    doc = new xml_document();
-    xml_parse_result result = doc->load_file(filePath.toStdString().c_str());
+    xml_parse_result result = doc.load_file(filePath.toStdString().c_str());
 
     if(!result)
     {
         qDebug() << result.description();
-    }
-}
-
-void Xspf::close()
-{
-    if(doc != nullptr)
-    {
-        delete doc;
     }
 }
 
@@ -48,27 +43,27 @@ void Xspf::addFileTag(QString& path)
     path = "file:///" + path;
 }
 
-Playlist Xspf::readPlaylist()
+Playlist* Xspf::readPlaylist()
 {
-    QString baseUri = this->getBaseUri();
-    QString filePath = fileInfo.absolutePath();
-    QList<Track*>* tracksList = this->getTracks(filePath);
+    Playlist* playlist = new Playlist(this->getBaseUri());
 
-    return Playlist(baseUri, tracksList);
+    QString filePath = fileInfo.absolutePath();
+    this->getTracks(filePath, *playlist);
+
+    return playlist;
 }
 
 QString Xspf::getBaseUri()
 {
-    xml_attribute baseUriAttribute = doc->select_node("/playlist").node().attribute("xml:base");
+    xml_attribute baseUriAttribute = doc.select_node("/playlist").node().attribute("xml:base");
     QString baseUri = baseUriAttribute.as_string();
     removeFileTag(baseUri);     // Remove the tag "File:///"
     return baseUri;
 }
 
-QList<Track*>* Xspf::getTracks(QString& filePath)
+void Xspf::getTracks(QString& filePath, Playlist& playlist)
 {
-    QList<Track*>* tracksList = new QList<Track*>();
-    xpath_node_set trackXPathNodesSet= doc->select_nodes("/playlist/trackList/track");
+    xpath_node_set trackXPathNodesSet= doc.select_nodes("/playlist/trackList/track");
 
     // Iterate over the set of tracks
     for(xpath_node trackXPathNode : trackXPathNodesSet)
@@ -85,10 +80,8 @@ QList<Track*>* Xspf::getTracks(QString& filePath)
         else
             track = new Track(location);
 
-        tracksList->append(track);
+        playlist.addTrack(track);
     }
-
-    return tracksList;
 }
 
 void Xspf::savePlaylist(QString filePath, Playlist& playlist)
@@ -103,7 +96,7 @@ void Xspf::savePlaylist(QString filePath, Playlist& playlist)
 
     // Add the playlist node and add the XML BASE attribute if the playlist contains an URI
     xml_node playlistNode = newDoc.append_child("playlist");
-    if(playlist.existsBaseUri()")
+    if(playlist.existsBaseUri())
     {
         QString uriBase = playlist.getBaseUri();
         addFileTag(uriBase);

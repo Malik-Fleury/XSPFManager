@@ -13,6 +13,7 @@ class Track
 public:
     Track(QString absoluePath);
     Track(QString uriBase, QString relativePath);
+    Track(Track& trackSource);
     virtual ~Track();
 
     QString getFilename();

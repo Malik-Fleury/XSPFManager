@@ -8,12 +8,15 @@
 class Playlist
 {
 public:
-    Playlist(QString baseUri, QList<Track*>* tracksList);
+    Playlist(QString baseUri);
+    Playlist(Playlist& playlistSource);
     ~Playlist();
 
     QDir getBaseUriDir();
     QString getBaseUri();
+    void addTrack(Track* track);
     Track* getTrack(int id);
+    void removeTrack(Track* track);
     bool existsBaseUri();
 
     QList<Track*>::const_iterator getConstIterator();
@@ -25,7 +28,7 @@ private:
 
 private:
     QDir baseUriDir;
-    QList<Track*>* tracksList;
+    QList<Track*> tracksList;
 };
 
 #endif // PLAYLIST_H

@@ -11,23 +11,23 @@ class Xspf
 public:
     Xspf();
     Xspf(QString filePath);
+    Xspf(Xspf& xspfSource);
     ~Xspf();
 
-    Playlist readPlaylist();
+    void open(QString filePath);
+    Playlist* readPlaylist();
     void savePlaylist(QString filename, Playlist& playlist);
 
 private:
-    void open(QString filePath);
-    void close();
     void removeFileTag(QString& path);
     void addFileTag(QString& path);
 
     QString getBaseUri();
-    QList<Track*>* getTracks(QString& filePat);
+    void getTracks(QString& filePat, Playlist& playlist);
 
 private:
     QFileInfo fileInfo;
-    pugi::xml_document* doc;
+    pugi::xml_document doc;
 };
 
 #endif // XSPFPLAYLIST_H

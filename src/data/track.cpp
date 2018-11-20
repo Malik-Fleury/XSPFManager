@@ -10,6 +10,11 @@ Track::Track(QString uriBase, QString relativePath):
 {
 }
 
+Track::Track(Track& trackSource)
+{
+    this->fileInfo = trackSource.fileInfo;
+}
+
 Track::~Track()
 {
     //delete dataMap;
