@@ -28,21 +28,16 @@ SOURCES += \
         src/window/mainwindow.cpp \
     src/data/track.cpp \
     src/data/playlist.cpp \
-    src/tools/xspf.cpp
+    src/tools/xspf.cpp \
+    lib/pugixml-1.9/src/pugixml.cpp
 
 HEADERS += \
     include/window/mainwindow.h \
     include/data/track.h \
     include/data/playlist.h \
-    include/tools/xspf.h
+    include/tools/xspf.h \
+    lib/pugixml-1.9/src/pugixml.hpp \
+    lib/pugixml-1.9/src/pugiconfig.hpp
 
 FORMS += \
     res/window/mainwindow.ui
-
-unix|win32: LIBS += -L$$PWD/lib/pugixml-1.9/bin/ -lpugixml
-
-INCLUDEPATH += $$PWD/lib/pugixml-1.9/include
-DEPENDPATH += $$PWD/lib/pugixml-1.9/include
-
-win32:!win32-g++: PRE_TARGETDEPS += $$PWD/lib/pugixml-1.9/bin/pugixml.lib
-else:unix|win32-g++: PRE_TARGETDEPS += $$PWD/lib/pugixml-1.9/bin/libpugixml.a
