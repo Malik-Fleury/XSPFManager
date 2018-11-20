@@ -8,9 +8,9 @@
 class Playlist
 {
 public:
-    Playlist(QString baseUri);
+    Playlist(QString baseUri = "");
     Playlist(Playlist& playlistSource);
-    ~Playlist();
+    virtual ~Playlist();
 
     QDir getBaseUriDir();
     QString getBaseUri();

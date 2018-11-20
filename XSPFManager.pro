@@ -29,6 +29,7 @@ SOURCES += \
     src/data/track.cpp \
     src/data/playlist.cpp \
     src/tools/xspf.cpp \
+    src/data/playlistmodel.cpp \
     lib/pugixml-1.9/src/pugixml.cpp
 
 HEADERS += \
@@ -36,6 +37,7 @@ HEADERS += \
     include/data/track.h \
     include/data/playlist.h \
     include/tools/xspf.h \
+    include/data/playlistmodel.h \
     lib/pugixml-1.9/src/pugixml.hpp \
     lib/pugixml-1.9/src/pugiconfig.hpp
 
