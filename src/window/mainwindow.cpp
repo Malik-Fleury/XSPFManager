@@ -4,8 +4,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     setupUi(this);
-    setupMenuActions();
     setupPlaylistTable();
+    setupMenuActions();
 
     path = "";
     playlist = nullptr;
@@ -27,6 +27,7 @@ void MainWindow::setupMenuActions()
     // Edit
     connect(menuEditUndo, &QAction::triggered, this, &MainWindow::undo);
     connect(menuEditRedo, &QAction::triggered, this, &MainWindow::redo);
+    connect(menuEditRemoveSel, &QAction::triggered, playlistTable, &PlaylistTable::removeTrack);
 
     // Language
     // Not available now
@@ -56,6 +57,8 @@ void MainWindow::newFile()
 {
     this->freeMemoryPlaylist();
     this->playlist = new Playlist();
+
+    this->setupPlaylistTableModel();
 }
 
 void MainWindow::open()
@@ -66,7 +69,7 @@ void MainWindow::open()
     {
         xspf.open(fileToOpen);
 
-        this->freeMemoryPlaylist();Wa
+        this->freeMemoryPlaylist();
         this->playlist = xspf.readPlaylist();
 
         // Add the data of the playlist to the table

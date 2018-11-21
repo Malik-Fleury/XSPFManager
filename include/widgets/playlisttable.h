@@ -9,6 +9,9 @@ public:
     PlaylistTable(QWidget* parent = 0);
     virtual ~PlaylistTable();
 
+    void addTrack(QString absoluteFilePath);
+    void removeTrack();
+
 public slots:
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;

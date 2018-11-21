@@ -68,10 +68,50 @@ QVariant PlaylistModel::headerData(int section, Qt::Orientation orientation, int
 
 bool PlaylistModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
+    switch(role)
+    {
+        case Qt::EditRole:
+            {
+                Track* track = playlist->getTrack(index.row());
+                track->setAbsoluteFilePath(value.toString());
+            }
+            break;
+    }
+
     return true;
 }
 
 Qt::ItemFlags PlaylistModel::flags(const QModelIndex& index) const
 {
     return Qt::ItemIsSelectable /*|  Qt::ItemIsEditable*/ | Qt::ItemIsEnabled;
+}
+
+
+bool PlaylistModel::insertRows(int position, int rows, const QModelIndex& index)
+{
+    Q_UNUSED(index);
+    beginInsertRows(QModelIndex(), position, position+rows-1);
+
+    for (int row=0; row < rows; ++row)
+    {
+        Track* track = new Track();
+        playlist->addTrack(track);
+    }
+
+    endInsertRows();
+    return true;
+}
+
+bool PlaylistModel::removeRows(int position, int rows, const QModelIndex& index)
+{
+    Q_UNUSED(index);
+    beginRemoveRows(QModelIndex(), position, position+rows-1);
+
+    for(int row = 0;row < rows; ++row)
+    {
+         playlist->removeTrack(position);
+    }
+
+    endRemoveRows();
+    return true;
 }
