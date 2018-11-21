@@ -13,12 +13,8 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout_2">
-    <item>
-     <widget class="QTableView" name="playlistTableView"/>
-    </item>
-   </layout>
+  <widget class="QWidget" name="centralWid">
+   <layout class="QVBoxLayout" name="verticalLayout_2"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -45,6 +41,7 @@
     </property>
     <addaction name="menuEditUndo"/>
     <addaction name="menuEditRedo"/>
+    <addaction name="menuEditRemoveSel"/>
    </widget>
    <widget class="QMenu" name="menuLanguage">
     <property name="title">
@@ -75,40 +72,72 @@
    <property name="text">
     <string>New</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+N</string>
+   </property>
   </action>
   <action name="menuFileOpen">
    <property name="text">
     <string>Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
    </property>
   </action>
   <action name="menuFileSave">
    <property name="text">
     <string>Save</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="menuFileSaveAs">
    <property name="text">
     <string>Save as ...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
   <action name="menuFileQuit">
    <property name="text">
     <string>Quit</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
   </action>
   <action name="menuEditRedo">
    <property name="text">
     <string>Redo</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Y</string>
    </property>
   </action>
   <action name="menuEditUndo">
    <property name="text">
     <string>Undo</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Z</string>
+   </property>
   </action>
   <action name="menuHelpAbout">
    <property name="text">
     <string>About</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+^</string>
+   </property>
+  </action>
+  <action name="menuEditRemoveSel">
+   <property name="text">
+    <string>Remove selected</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
   </action>
  </widget>

@@ -4,8 +4,8 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
     setupUi(this);
-    setupMenuActions();
     setupPlaylistTable();
+    setupMenuActions();
 
     path = "";
     playlist = nullptr;
@@ -27,6 +27,7 @@ void MainWindow::setupMenuActions()
     // Edit
     connect(menuEditUndo, &QAction::triggered, this, &MainWindow::undo);
     connect(menuEditRedo, &QAction::triggered, this, &MainWindow::redo);
+    connect(menuEditRemoveSel, &QAction::triggered, playlistTable, &PlaylistTable::removeTrack);
 
     // Language
     // Not available now
@@ -35,22 +36,29 @@ void MainWindow::setupMenuActions()
     connect(menuHelpAbout, &QAction::triggered, this, &MainWindow::about);
 }
 
+void MainWindow::setupOtherEvents()
+{
+    //connect(this->playlistTableView, &QTableView::)
+}
+
 void MainWindow::setupPlaylistTable()
 {
-    PlaylistModel* model = new PlaylistModel(this);
-    this->playlistTableView->setModel(model);
+    this->playlistTable = new PlaylistTable(this);
+    this->centralWidget()->layout()->addWidget(playlistTable);
+}
 
-    this->playlistTableView->horizontalHeader()->setSectionsMovable(true);
-    this->playlistTableView->verticalHeader()->setSectionsMovable(true);
-
-    this->playlistTableView->verticalHeader()->setDragDropMode(QAbstractItemView::InternalMove);
-    this->playlistTableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+void MainWindow::setupPlaylistTableModel()
+{
+    PlaylistModel* model = new PlaylistModel(this->playlist, this);
+    this->playlistTable->setModel(model);
 }
 
 void MainWindow::newFile()
 {
     this->freeMemoryPlaylist();
     this->playlist = new Playlist();
+
+    this->setupPlaylistTableModel();
 }
 
 void MainWindow::open()
@@ -65,6 +73,7 @@ void MainWindow::open()
         this->playlist = xspf.readPlaylist();
 
         // Add the data of the playlist to the table
+        setupPlaylistTableModel();
     }
 }
 
@@ -111,4 +120,9 @@ void MainWindow::freeMemoryPlaylist()
         delete playlist;
         playlist = nullptr;
     }
+}
+
+void MainWindow::dropEventHandler(QDropEvent* event)
+{
+
 }

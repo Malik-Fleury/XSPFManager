@@ -45,6 +45,16 @@ void Playlist::removeTrack(Track* track)
     this->tracksList.removeOne(track);
 }
 
+void Playlist::removeTrack(int id)
+{
+    this->tracksList.removeAt(id);
+}
+
+int Playlist::getNumberOfTracks()
+{
+    return this->tracksList.size();
+}
+
 bool Playlist::existsBaseUri()
 {
     return this->getBaseUri() != ".";

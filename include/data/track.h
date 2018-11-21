@@ -11,7 +11,7 @@
 class Track
 {
 public:
-    Track(QString absoluePath);
+    Track(QString absoluteFilePath = "");
     Track(QString uriBase, QString relativePath);
     Track(Track& trackSource);
     virtual ~Track();
@@ -20,6 +20,8 @@ public:
     QString getAbsolutePath();
     QString getAbsoluteFilePath();
     QString getRelativeFilePath(QDir& absolutePathDir);
+
+    void setAbsoluteFilePath(QString absoluteFilePath);
 
     static QString generateAbsolutePath(QString baseUri, QString relativePath);
 
