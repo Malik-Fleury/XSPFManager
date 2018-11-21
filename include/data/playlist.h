@@ -17,6 +17,7 @@ public:
     void addTrack(Track* track);
     Track* getTrack(int id);
     void removeTrack(Track* track);
+    void removeTrack(int id);
     int getNumberOfTracks();
     bool existsBaseUri();
 

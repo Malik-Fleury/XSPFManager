@@ -1,6 +1,6 @@
 #include "include/data/track.h"
 
-Track::Track(QString absolutePath): fileInfo(absolutePath)
+Track::Track(QString absoluteFilePath): fileInfo(absoluteFilePath)
 {
     //this->dataMap = new QMap<QString, QString>();
 }
@@ -18,6 +18,11 @@ Track::Track(Track& trackSource)
 Track::~Track()
 {
     //delete dataMap;
+}
+
+void Track::setAbsoluteFilePath(QString absoluteFilePath)
+{
+    this->fileInfo.setFile(absoluteFilePath);
 }
 
 QString Track::getFilename()
