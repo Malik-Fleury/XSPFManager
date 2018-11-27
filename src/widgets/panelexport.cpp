@@ -20,6 +20,14 @@ PlaylistModel* PanelExport::getPlaylistModel()
 void PanelExport::setPlaylistModel(PlaylistModel* playlistModel)
 {
     model = playlistModel;
+
+    Playlist* playlist = playlistModel->getPlaylist();
+    if(playlist->existsBaseUri())
+    {
+        this->checkBoxUri->setChecked(true);
+        this->lineEditUri->setEnabled(true);
+        this->lineEditUri->setText(playlist->getBaseUri());
+    }
 }
 
 void PanelExport::setupActions()
@@ -40,24 +48,29 @@ void PanelExport::chooseOutputFile()
 
 void PanelExport::exportFiles()
 {
+    int count = this->model->getPlaylist()->getNumberOfTracks();
     QFileInfo outputFileInfo(lineEditOutputFile->text());
     Playlist* playlist = model->getPlaylist();
-    QProgressDialog progressBarDialog("Copying files...", "Cancel",0, 100, this);
+    QProgressDialog progressBarDialog("Copying files...", "Cancel",0, count-1, this);
     progressBarDialog.setWindowModality(Qt::WindowModal);
 
     progressBarDialog.show();
 
-    if(!this->lineEditUri->text().isEmpty())
+    if(this->checkBoxUri->isChecked())
     {
         QString newUri = this->lineEditUri->text();
         playlist->setBaseUri(newUri);
+    }
+    else
+    {
+        playlist->setBaseUri("");
     }
 
     int i = 0;
     for(auto itr = playlist->getConstBegin(); itr != playlist->getConstEnd(); itr++)
     {
         Track* track = (Track*)*itr;
-        QString newAbsoluteFilePath = outputFileInfo.absolutePath() + QDir::separator() + track->getFilename();
+        QString newAbsoluteFilePath = outputFileInfo.absolutePath() + "/" + track->getFilename();
         QFile::copy(track->getAbsoluteFilePath(), newAbsoluteFilePath);
         progressBarDialog.setValue(i++);
     }
