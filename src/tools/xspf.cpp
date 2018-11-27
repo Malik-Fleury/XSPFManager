@@ -49,6 +49,7 @@ Playlist* Xspf::readPlaylist()
     Playlist* playlist = new Playlist(this->getBaseUri());
 
     QString filePath = fileInfo.absolutePath();
+    qDebug() << filePath;
     this->getTracks(filePath, *playlist);
 
     return playlist;
@@ -64,7 +65,7 @@ QString Xspf::getBaseUri()
 
 void Xspf::getTracks(QString& filePath, Playlist& playlist)
 {
-    xpath_node_set trackXPathNodesSet= doc.select_nodes("/playlist/trackList/track");
+    xpath_node_set trackXPathNodesSet = doc.select_nodes("/playlist/trackList/track");
 
     // Iterate over the set of tracks
     for(xpath_node trackXPathNode : trackXPathNodesSet)
@@ -85,7 +86,7 @@ void Xspf::getTracks(QString& filePath, Playlist& playlist)
     }
 }
 
-void Xspf::savePlaylist(QString filePath, Playlist& playlist)
+void Xspf::savePlaylist(QString filePath, Playlist& playlist, bool absolute)
 {
     QFileInfo fileDestInfo(filePath);
     xml_document newDoc;
@@ -99,7 +100,7 @@ void Xspf::savePlaylist(QString filePath, Playlist& playlist)
     xml_node playlistNode = newDoc.append_child("playlist");
     if(playlist.existsBaseUri())
     {
-        QString uriBase = playlist.getBaseUri();
+        QString uriBase = playlist.getBaseUri() + "/";
         addFileTag(uriBase);
         playlistNode.append_attribute("xml:base").set_value(uriBase.toStdString().c_str());
     }
@@ -122,12 +123,20 @@ void Xspf::savePlaylist(QString filePath, Playlist& playlist)
             QString relativePathToTrack = track->getRelativeFilePath(absolutePathDir);
             dataNode.text().set(relativePathToTrack.toStdString().c_str());
         }
-        // Else we set the absolute path to the file
+        // Else we set the absolute or relative path
         else
         {
-            QString absolutePath = track->getAbsolutePath();
-            addFileTag(absolutePath);
-            dataNode.text().set(absolutePath.toStdString().c_str());
+            if(!absolute)
+            {
+                QDir absoluteDir = fileDestInfo.absoluteDir();
+                QString relativeFilePath = track->getRelativeFilePath(absoluteDir);
+                dataNode.text().set(relativeFilePath.toStdString().c_str());
+            }
+            else
+            {
+                QString absoluteFilePath = track->getAbsoluteFilePath();
+                dataNode.text().set(absoluteFilePath.toStdString().c_str());
+            }
         }
     }
 

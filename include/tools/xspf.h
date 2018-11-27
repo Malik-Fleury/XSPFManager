@@ -16,7 +16,7 @@ public:
 
     void open(QString filePath);
     Playlist* readPlaylist();
-    void savePlaylist(QString filename, Playlist& playlist);
+    void savePlaylist(QString filename, Playlist& playlist, bool absolute = false);
 
 private:
     void removeFileTag(QString& path);
