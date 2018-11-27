@@ -3,12 +3,13 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
-    setupUi(this);
-    setupPlaylistTable();
-    setupMenuActions();
-
     path = "";
     playlist = nullptr;
+
+    setupUi(this);
+    setupPlaylistTable();
+    setupPanelExport();
+    setupMenuActions();
 }
 
 MainWindow::~MainWindow()
@@ -47,10 +48,17 @@ void MainWindow::setupPlaylistTable()
     this->centralWidget()->layout()->addWidget(playlistTable);
 }
 
+void MainWindow::setupPanelExport()
+{
+    this->panelExport = new PanelExport(this);
+    this->centralWidget()->layout()->addWidget(panelExport);
+}
+
 void MainWindow::setupPlaylistTableModel()
 {
     PlaylistModel* model = new PlaylistModel(this->playlist, this);
     this->playlistTable->setModel(model);
+    this->panelExport->setPlaylistModel(model);
 }
 
 void MainWindow::newFile()
