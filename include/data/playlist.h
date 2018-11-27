@@ -14,6 +14,7 @@ public:
 
     QDir getBaseUriDir();
     QString getBaseUri();
+    void setBaseUri(QString baseUri);
     void addTrack(Track* track);
     Track* getTrack(int id);
     void removeTrack(Track* track);

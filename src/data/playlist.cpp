@@ -30,6 +30,11 @@ QDir Playlist::getBaseUriDir()
     return this->baseUriDir;
 }
 
+void Playlist::setBaseUri(QString baseUri)
+{
+    this->baseUriDir.setPath(baseUri);
+}
+
 void Playlist::addTrack(Track* track)
 {
     this->tracksList.append(track);
