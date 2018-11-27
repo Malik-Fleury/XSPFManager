@@ -31,7 +31,8 @@ SOURCES += \
     src/tools/xspf.cpp \
     src/data/playlistmodel.cpp \
     lib/pugixml-1.9/src/pugixml.cpp \
-    src/widgets/playlisttable.cpp
+    src/widgets/playlisttable.cpp \
+    src/widgets/panelexport.cpp
 
 HEADERS += \
     include/window/mainwindow.h \
@@ -41,7 +42,9 @@ HEADERS += \
     include/data/playlistmodel.h \
     lib/pugixml-1.9/src/pugixml.hpp \
     lib/pugixml-1.9/src/pugiconfig.hpp \
-    include/widgets/playlisttable.h
+    include/widgets/playlisttable.h \
+    include/widgets/panelexport.h
 
 FORMS += \
-    res/window/mainwindow.ui
+    res/window/mainwindow.ui \
+    res/widgets/panelexport.ui
