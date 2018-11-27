@@ -115,3 +115,8 @@ bool PlaylistModel::removeRows(int position, int rows, const QModelIndex& index)
     endRemoveRows();
     return true;
 }
+
+Playlist* PlaylistModel::getPlaylist()
+{
+    return playlist;
+}

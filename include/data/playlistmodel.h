@@ -32,6 +32,8 @@ public:
     bool insertRows(int position, int rows, const QModelIndex& index=QModelIndex());
     bool removeRows(int position, int rows, const QModelIndex& index=QModelIndex());
 
+    Playlist* getPlaylist();
+
 private:
     Playlist* playlist;
 };
