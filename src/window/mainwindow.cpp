@@ -94,7 +94,7 @@ void MainWindow::save()
     }
 
     // Save the XSPF (need table)
-    xspf.savePlaylist(this->path, *playlist);
+    xspf.savePlaylist(this->path, *playlist, true);
 }
 
 void MainWindow::saveAs()
