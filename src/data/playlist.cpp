@@ -62,7 +62,7 @@ int Playlist::getNumberOfTracks()
 
 bool Playlist::existsBaseUri()
 {
-    return this->getBaseUri() != ".";
+    return this->getBaseUri() != "." && this->getBaseUri() != "";
 }
 
 QList<Track*>::const_iterator Playlist::getConstBegin()
