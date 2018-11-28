@@ -3,6 +3,7 @@
 PlaylistTable::PlaylistTable(QWidget* parent): QTableView(parent)
 {
     this->setupTable();
+    this->setupFormats();
 }
 
 PlaylistTable::~PlaylistTable()
@@ -52,8 +53,14 @@ void PlaylistTable::dropEvent(QDropEvent* event)
 
     for(QUrl url: mimeData->urls())
     {
-        QString absoluteFilePath = url.toString().replace("file:///", "");
-        this->addTrack(absoluteFilePath);
+        QString urlStr = url.toString();
+        fileInfo.setFile(urlStr);
+
+        if(listFormats.contains(fileInfo.suffix()))
+        {
+            QString absoluteFilePath = urlStr.replace("file:///", "");
+            this->addTrack(absoluteFilePath);
+        }
     }
 }
 
@@ -69,5 +76,13 @@ void PlaylistTable::setupTable()
     this->setDropIndicatorShown(true);
 
     this->setSelectionBehavior(QAbstractItemView::SelectRows);
+}
+
+void PlaylistTable::setupFormats()
+{
+    listFormats.append("mp3");
+    listFormats.append("flac");
+    listFormats.append("wav");
+    listFormats.append("m3u8");
 }
 

@@ -19,7 +19,10 @@ public slots:
 
 private:
     void setupTable();
+    void setupFormats();
 
+private:
+    QStringList listFormats;
 };
 
 #endif // PLAYLISTTABLE_H
