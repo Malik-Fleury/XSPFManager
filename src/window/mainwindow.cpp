@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent) :
     setupPlaylistTable();
     setupPanelExport();
     setupMenuActions();
+
+    enableWidgets(false);
 }
 
 MainWindow::~MainWindow()
@@ -61,12 +63,20 @@ void MainWindow::setupPlaylistTableModel()
     this->panelExport->setPlaylistModel(model);
 }
 
+void MainWindow::enableWidgets(bool enable)
+{
+    this->playlistTable->setEnabled(enable);
+    this->panelExport->setEnabled(enable);
+}
+
 void MainWindow::newFile()
 {
     this->freeMemoryPlaylist();
     this->playlist = new Playlist();
 
     this->setupPlaylistTableModel();
+
+    this->enableWidgets(true);
 }
 
 void MainWindow::open()
@@ -83,6 +93,8 @@ void MainWindow::open()
         // Add the data of the playlist to the table
         setupPlaylistTableModel();
     }
+
+    this->enableWidgets(true);
 }
 
 void MainWindow::save()

@@ -23,6 +23,7 @@ private:
     void setupPlaylistTable();
     void setupPanelExport();
     void setupPlaylistTableModel();
+    void enableWidgets(bool enable);
 
     void newFile();
     void open();
