@@ -65,6 +65,11 @@ bool Playlist::existsBaseUri()
     return this->getBaseUri() != "." && this->getBaseUri() != "";
 }
 
+void Playlist::move(int from, int to)
+{
+    this->tracksList.move(from, to);
+}
+
 QList<Track*>::const_iterator Playlist::getConstBegin()
 {
     return tracksList.constBegin();

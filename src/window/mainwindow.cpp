@@ -30,7 +30,7 @@ void MainWindow::setupMenuActions()
     // Edit
     connect(menuEditUndo, &QAction::triggered, this, &MainWindow::undo);
     connect(menuEditRedo, &QAction::triggered, this, &MainWindow::redo);
-    connect(menuEditRemoveSel, &QAction::triggered, playlistTable, &PlaylistTable::removeTrack);
+    connect(menuEditRemoveSel, &QAction::triggered, playlistTable, &PlaylistTableWidget::removeTrack);
 
     // Language
     // Not available now
@@ -46,7 +46,7 @@ void MainWindow::setupOtherEvents()
 
 void MainWindow::setupPlaylistTable()
 {
-    this->playlistTable = new PlaylistTable(this);
+    this->playlistTable = new PlaylistTableWidget(this);
     this->centralWidget()->layout()->addWidget(playlistTable);
 }
 
@@ -54,13 +54,6 @@ void MainWindow::setupPanelExport()
 {
     this->panelExport = new PanelExport(this);
     this->centralWidget()->layout()->addWidget(panelExport);
-}
-
-void MainWindow::setupPlaylistTableModel()
-{
-    PlaylistModel* model = new PlaylistModel(this->playlist, this);
-    this->playlistTable->setModel(model);
-    this->panelExport->setPlaylistModel(model);
 }
 
 void MainWindow::enableWidgets(bool enable)
@@ -74,7 +67,6 @@ void MainWindow::newFile()
     this->freeMemoryPlaylist();
     this->playlist = new Playlist();
 
-    this->setupPlaylistTableModel();
 
     this->enableWidgets(true);
 }
@@ -91,7 +83,7 @@ void MainWindow::open()
         this->playlist = xspf.readPlaylist();
 
         // Add the data of the playlist to the table
-        setupPlaylistTableModel();
+        playlistTable->fill(playlist);
     }
 
     this->enableWidgets(true);

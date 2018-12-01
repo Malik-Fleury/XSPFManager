@@ -8,6 +8,7 @@
 #include "ui_mainwindow.h"
 #include "include/tools/xspf.h"
 #include "include/data/playlistmodel.h"
+#include "include/widgets/table/PlaylistTableWidget.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -22,7 +23,6 @@ private:
     void setupOtherEvents();
     void setupPlaylistTable();
     void setupPanelExport();
-    void setupPlaylistTableModel();
     void enableWidgets(bool enable);
 
     void newFile();
@@ -41,7 +41,7 @@ private slots:
     void dropEventHandler(QDropEvent* event);
 
 private:
-    PlaylistTable* playlistTable;
+    PlaylistTableWidget* playlistTable;
     PanelExport* panelExport;
 
     Xspf xspf;

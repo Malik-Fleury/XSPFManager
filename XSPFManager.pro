@@ -32,7 +32,8 @@ SOURCES += \
     src/data/playlistmodel.cpp \
     lib/pugixml-1.9/src/pugixml.cpp \
     src/widgets/playlisttable.cpp \
-    src/widgets/panelexport.cpp
+    src/widgets/panelexport.cpp \
+    src/widgets/table/playlisttablewidget.cpp
 
 HEADERS += \
     include/window/mainwindow.h \
@@ -43,7 +44,8 @@ HEADERS += \
     lib/pugixml-1.9/src/pugixml.hpp \
     lib/pugixml-1.9/src/pugiconfig.hpp \
     include/widgets/playlisttable.h \
-    include/widgets/panelexport.h
+    include/widgets/panelexport.h \
+    include/widgets/table/playlisttablewidget.h
 
 FORMS += \
     res/window/mainwindow.ui \

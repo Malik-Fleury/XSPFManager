@@ -21,6 +21,7 @@ public:
     void removeTrack(int id);
     int getNumberOfTracks();
     bool existsBaseUri();
+    void move(int from, int to);
 
     QList<Track*>::const_iterator getConstIterator();
     QList<Track*>::const_iterator getConstBegin();
