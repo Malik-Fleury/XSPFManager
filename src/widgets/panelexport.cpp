@@ -12,22 +12,14 @@ PanelExport::~PanelExport()
 {
 }
 
-PlaylistModel* PanelExport::getPlaylistModel()
+Playlist* PanelExport::getPlaylist()
 {
-    return model;
+    return this->playlist;
 }
 
-void PanelExport::setPlaylistModel(PlaylistModel* playlistModel)
+void PanelExport::setPlaylist(Playlist* playlist)
 {
-    model = playlistModel;
-
-    Playlist* playlist = playlistModel->getPlaylist();
-    if(playlist->existsBaseUri())
-    {
-        this->checkBoxUri->setChecked(true);
-        this->lineEditUri->setEnabled(true);
-        this->lineEditUri->setText(playlist->getBaseUri());
-    }
+    this->playlist = playlist;
 }
 
 void PanelExport::setupActions()
@@ -48,9 +40,8 @@ void PanelExport::chooseOutputFile()
 
 void PanelExport::exportFiles()
 {
-    int count = this->model->getPlaylist()->getNumberOfTracks();
+    int count = playlist->getNumberOfTracks();
     QFileInfo outputFileInfo(lineEditOutputFile->text());
-    Playlist* playlist = model->getPlaylist();
     QProgressDialog progressBarDialog("Copying files...", "Cancel",0, count-1, this);
     progressBarDialog.setWindowModality(Qt::WindowModal);
 

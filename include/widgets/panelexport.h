@@ -2,7 +2,6 @@
 #define PANELEXPORT_H
 
 #include <QtWidgets>
-#include "include/data/playlistmodel.h"
 #include "include/data/playlist.h"
 #include "include/data/track.h"
 #include "include/tools/xspf.h"
@@ -16,8 +15,8 @@ public:
     explicit PanelExport(QWidget *parent = 0);
     ~PanelExport();
 
-     PlaylistModel* getPlaylistModel();
-     void setPlaylistModel(PlaylistModel* playlistModel);
+    Playlist* getPlaylist();
+    void setPlaylist(Playlist* playlist);
 
 private:
     void setupActions();
@@ -27,7 +26,7 @@ private slots:
     void exportFiles();
 
 private:
-    PlaylistModel* model;
+    Playlist* playlist;
 };
 
 #endif // PANELEXPORT_H
