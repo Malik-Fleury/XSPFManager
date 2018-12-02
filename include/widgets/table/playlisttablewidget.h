@@ -8,6 +8,7 @@
 
 class AddTrackCommand;
 class MoveTrackCommand;
+class RemoveTrackCommand;
 
 class PlaylistTableWidget : public QTableWidget
 {
@@ -52,5 +53,6 @@ private:
 
 #include "include/commands/addtrackcommand.h"
 #include "include/commands/movetrackcommand.h"
+#include "include/commands/removetrackcommand.h"
 
 #endif // PLAYLISTWIDGET_H

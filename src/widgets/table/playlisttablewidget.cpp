@@ -52,12 +52,19 @@ void PlaylistTableWidget::removeSelectedTracks()
     int totalColumn = this->columnCount();
     QModelIndexList selectionIndexes = this->selectedIndexes();
     int totalItems = selectionIndexes.count();
+    int numberOfFilesRemoved = totalItems / totalColumn;
 
-    for(int index = 0;index < totalItems; index += totalColumn)
+    for(int index = totalItems-1;index >= 0; index -= totalColumn)
     {
         int row = selectionIndexes[index].row();
-        this->removeTrack(row);
+        Track* track = playlist->getTrack(row);
+
+        commandStack.push(new RemoveTrackCommand(this, *track, row));
+        commandStack.redo();
     }
+
+    undoNumberOfSteps.push(numberOfFilesRemoved);
+    redoNumberOfSteps.clear();
 }
 
 void PlaylistTableWidget::removeTrack(int row)
