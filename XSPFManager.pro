@@ -31,7 +31,9 @@ SOURCES += \
     src/tools/xspf.cpp \
     lib/pugixml-1.9/src/pugixml.cpp \
     src/widgets/panelexport.cpp \
-    src/widgets/table/playlisttablewidget.cpp
+    src/widgets/table/playlisttablewidget.cpp \
+    src/commands/addtrackcommand.cpp \
+    src/commands/movetrackcommand.cpp
 
 HEADERS += \
     include/window/mainwindow.h \
@@ -41,7 +43,9 @@ HEADERS += \
     lib/pugixml-1.9/src/pugixml.hpp \
     lib/pugixml-1.9/src/pugiconfig.hpp \
     include/widgets/panelexport.h \
-    include/widgets/table/playlisttablewidget.h
+    include/widgets/table/playlisttablewidget.h \
+    include/commands/addtrackcommand.h \
+    include/commands/movetrackcommand.h
 
 FORMS += \
     res/window/mainwindow.ui \
