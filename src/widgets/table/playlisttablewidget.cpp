@@ -83,16 +83,15 @@ void PlaylistTableWidget::dropEvent(QDropEvent* event)
 void PlaylistTableWidget::move(QDropEvent* event)
 {
     QModelIndexList selectionIndexes = this->selectedIndexes();
-    int totalColumns = selectionIndexes.count();
+    int totalItems = selectionIndexes.count();
     int rowTo = this->rowAt(event->pos().y());
 
-    for(int index = 0;index < totalColumns; index+=3)
+    for(int index = 0;index < totalItems; index += this->columnCount())
     {
         if(rowTo != -1)
         {
             int rowFrom = selectionIndexes[index].row();
 
-            qDebug() << rowFrom << ":" << rowTo;
             playlist->move(rowFrom, rowTo);
             QList<QTableWidgetItem*> rowItems = this->takeRow(rowFrom);
 
