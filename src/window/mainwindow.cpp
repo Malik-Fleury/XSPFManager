@@ -67,7 +67,7 @@ void MainWindow::newFile()
     this->freeMemoryPlaylist();
     this->playlist = new Playlist();
     this->playlistTable->fill(playlist);
-
+    this->panelExport->setPlaylist(playlist);
     this->enableWidgets(true);
 }
 
@@ -84,6 +84,7 @@ void MainWindow::open()
 
         // Add the data of the playlist to the table
         playlistTable->fill(playlist);
+        panelExport->setPlaylist(playlist);
     }
 
     this->enableWidgets(true);
@@ -96,9 +97,10 @@ void MainWindow::save()
     {
         this->saveAs();
     }
-
-    // Save the XSPF (need table)
-    xspf.savePlaylist(this->path, *playlist, true);
+    else
+    {
+        xspf.savePlaylist(this->path, *playlist, true);
+    }
 }
 
 void MainWindow::saveAs()
