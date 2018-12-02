@@ -3,10 +3,11 @@
 
 #include <QMainWindow>
 #include <QtWidgets>
-#include "include/widgets/panelexport.h"
+
 #include "ui_mainwindow.h"
 #include "include/tools/xspf.h"
 #include "include/widgets/table/playlisttablewidget.h"
+#include "include/widgets/panelexport.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
@@ -27,9 +28,6 @@ private:
     void open();
     void save();
     void saveAs();
-
-    void undo();
-    void redo();
 
     void about();
 

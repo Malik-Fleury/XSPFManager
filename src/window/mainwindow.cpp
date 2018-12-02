@@ -28,9 +28,9 @@ void MainWindow::setupMenuActions()
     connect(menuFileQuit, &QAction::triggered, this, &QApplication::quit);
 
     // Edit
-    connect(menuEditUndo, &QAction::triggered, this, &MainWindow::undo);
-    connect(menuEditRedo, &QAction::triggered, this, &MainWindow::redo);
-    connect(menuEditRemoveSel, &QAction::triggered, playlistTable, &PlaylistTableWidget::removeTrack);
+    connect(menuEditUndo, &QAction::triggered, playlistTable, &PlaylistTableWidget::undo);
+    connect(menuEditRedo, &QAction::triggered, playlistTable, &PlaylistTableWidget::redo);
+    connect(menuEditRemoveSel, &QAction::triggered, playlistTable, &PlaylistTableWidget::removeSelectedTracks);
 
     // Language
     // Not available now
@@ -112,14 +112,6 @@ void MainWindow::saveAs()
         this->path = fileToSave;
         this->save();
     }
-}
-
-void MainWindow::undo()
-{
-}
-
-void MainWindow::redo()
-{
 }
 
 void MainWindow::about()
