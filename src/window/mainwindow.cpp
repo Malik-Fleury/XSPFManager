@@ -66,7 +66,7 @@ void MainWindow::newFile()
 {
     this->freeMemoryPlaylist();
     this->playlist = new Playlist();
-
+    this->playlistTable->fill(playlist);
 
     this->enableWidgets(true);
 }

@@ -3,11 +3,9 @@
 
 #include <QMainWindow>
 #include <QtWidgets>
-#include "include/widgets/playlisttable.h"
 #include "include/widgets/panelexport.h"
 #include "ui_mainwindow.h"
 #include "include/tools/xspf.h"
-#include "include/data/playlistmodel.h"
 #include "include/widgets/table/PlaylistTableWidget.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
