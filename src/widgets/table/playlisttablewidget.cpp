@@ -118,7 +118,7 @@ void PlaylistTableWidget::redo()
     if(commandStack.canRedo())
     {
         int redoSteps = redoNumberOfSteps.dequeue();
-        undoNumberOfSteps.push(redoStep);
+        undoNumberOfSteps.push(redoSteps);
 
         for(int counterStep = 0;counterStep < redoSteps; counterStep++)
         {
@@ -205,6 +205,7 @@ void PlaylistTableWidget::move(QDropEvent* event)
     }
 
     undoNumberOfSteps.push(numberOfFiles);
+    redoNumberOfSteps.clear();
     event->accept();
 }
 
@@ -245,6 +246,7 @@ void PlaylistTableWidget::addTracksFromOutside(QDropEvent* event)
     if(numberOfFilesAdded > 0)
     {
         undoNumberOfSteps.push(numberOfFilesAdded);
+        redoNumberOfSteps.clear();
         event->acceptProposedAction();
     }
     else
