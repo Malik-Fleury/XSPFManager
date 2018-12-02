@@ -35,9 +35,16 @@ void Playlist::setBaseUri(QString baseUri)
     this->baseUriDir.setPath(baseUri);
 }
 
-void Playlist::addTrack(Track* track)
+void Playlist::addTrack(Track* track, int position)
 {
-    this->tracksList.append(track);
+    if(position < 0)
+    {
+        this->tracksList.append(track);
+    }
+    else
+    {
+        this->tracksList.insert(position, track);
+    }
 }
 
 Track* Playlist::getTrack(int id)
