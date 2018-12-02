@@ -33,7 +33,8 @@ SOURCES += \
     src/widgets/panelexport.cpp \
     src/widgets/table/playlisttablewidget.cpp \
     src/commands/addtrackcommand.cpp \
-    src/commands/movetrackcommand.cpp
+    src/commands/movetrackcommand.cpp \
+    src/commands/removetrackcommand.cpp
 
 HEADERS += \
     include/window/mainwindow.h \
@@ -45,7 +46,8 @@ HEADERS += \
     include/widgets/panelexport.h \
     include/widgets/table/playlisttablewidget.h \
     include/commands/addtrackcommand.h \
-    include/commands/movetrackcommand.h
+    include/commands/movetrackcommand.h \
+    include/commands/removetrackcommand.h
 
 FORMS += \
     res/window/mainwindow.ui \
