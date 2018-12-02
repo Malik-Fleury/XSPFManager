@@ -2,7 +2,12 @@
 #define PLAYLISTWIDGET_H
 
 #include <QtWidgets>
+#include <QUndoStack>
+
 #include "include/data/playlist.h"
+
+class AddTrackCommand;
+class MoveTrackCommand;
 
 class PlaylistTableWidget : public QTableWidget
 {
@@ -25,16 +30,27 @@ public slots:
     void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
 
+    void undo();
+    void redo();
+
 private:
     void configureHeaders();
     void configureTable();
     void setupFormats();
     void move(QDropEvent* event);
     void addTracksFromOutside(QDropEvent* event);
+    void removeSteps();
 
 private:
     Playlist* playlist;
     QStringList listFormats;
+
+    QUndoStack commandStack;
+    QStack<int> undoNumberOfSteps;
+    QQueue<int> redoNumberOfSteps;
 };
+
+#include "include/commands/addtrackcommand.h"
+#include "include/commands/movetrackcommand.h"
 
 #endif // PLAYLISTWIDGET_H

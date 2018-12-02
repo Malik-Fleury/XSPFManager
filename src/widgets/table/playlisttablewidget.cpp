@@ -62,7 +62,7 @@ void PlaylistTableWidget::removeSelectedTracks()
 
 void PlaylistTableWidget::removeTrack(int row)
 {
-    QTableWidget::removeRow(row);
+    this->removeRow(row);
     playlist->removeTrack(row);
 }
 
@@ -99,56 +99,32 @@ void PlaylistTableWidget::dropEvent(QDropEvent* event)
     }
 }
 
-void PlaylistTableWidget::move(QDropEvent* event)
+void PlaylistTableWidget::undo()
 {
-    QModelIndexList selectionIndexes = this->selectedIndexes();
-    int totalItems = selectionIndexes.count();
-    int rowTo = this->rowAt(event->pos().y());
-
-    for(int index = 0;index < totalItems; index += this->columnCount())
+    if(commandStack.canUndo())
     {
-        int rowFrom = selectionIndexes[index].row();
+        int undoSteps = undoNumberOfSteps.pop();
+        redoNumberOfSteps.enqueue(undoSteps);
 
-        if(rowTo >= 0)
+        for(int counterStep = 0;counterStep < undoSteps; counterStep++)
         {
-            this->moveTrack(rowFrom, rowTo++);
-        }
-        else
-        {
-            this->moveTrack(rowFrom, this->rowCount()-1);
+            commandStack.undo();
         }
     }
 }
 
-void PlaylistTableWidget::addTracksFromOutside(QDropEvent* event)
+void PlaylistTableWidget::redo()
 {
-    const QMimeData* mimeData = event->mimeData();
-    QFileInfo fileInfo;
-    int rowTo = this->rowAt(event->pos().y());
-
-    for(QUrl url: mimeData->urls())
+    if(commandStack.canRedo())
     {
-        QString urlStr = url.toString();
-        fileInfo.setFile(urlStr);
+        int redoSteps = redoNumberOfSteps.dequeue();
+        undoNumberOfSteps.push(redoStep);
 
-        if(listFormats.contains(fileInfo.suffix()))
+        for(int counterStep = 0;counterStep < redoSteps; counterStep++)
         {
-            QString absoluteFilePath = urlStr.replace("file:///", "");
-
-            Track* track = new Track(absoluteFilePath);
-            playlist->addTrack(track);
-
-            if(rowTo >= 0)
-            {
-                this->addTrack(track, rowTo++);
-            }
-            else
-            {
-                this->addTrack(track);
-            }
+            commandStack.redo();
         }
     }
-    event->acceptProposedAction();
 }
 
 void PlaylistTableWidget::setRow(int row, const QList<QTableWidgetItem*>& rowItems)
@@ -203,4 +179,76 @@ void PlaylistTableWidget::setupFormats()
     listFormats.append("flac");
     listFormats.append("wav");
     listFormats.append("m3u8");
+}
+
+void PlaylistTableWidget::move(QDropEvent* event)
+{
+    QModelIndexList selectionIndexes = this->selectedIndexes();
+    int totalItems = selectionIndexes.count();
+    int rowTo = this->rowAt(event->pos().y());
+    int numberOfFiles = totalItems / columnCount();
+
+    for(int index = 0;index < totalItems; index += this->columnCount())
+    {
+        int rowFrom = selectionIndexes[index].row();
+
+        if(rowTo >= 0)
+        {
+            commandStack.push(new MoveTrackCommand(this, rowFrom, rowTo++));
+            commandStack.redo();
+        }
+        else
+        {
+            commandStack.push(new MoveTrackCommand(this, rowFrom, this->rowCount()-1));
+            commandStack.redo();
+        }
+    }
+
+    undoNumberOfSteps.push(numberOfFiles);
+    event->accept();
+}
+
+void PlaylistTableWidget::addTracksFromOutside(QDropEvent* event)
+{
+    QFileInfo fileInfo;
+    const QMimeData* mimeData = event->mimeData();
+    int rowTo = this->rowAt(event->pos().y());
+    int numberOfFilesAdded = 0;
+
+    for(QUrl url: mimeData->urls())
+    {
+        QString urlStr = url.toString();
+        fileInfo.setFile(urlStr);
+
+        if(listFormats.contains(fileInfo.suffix()))
+        {
+            QString absoluteFilePath = urlStr.replace("file:///", "");
+
+            Track* track = new Track(absoluteFilePath);
+            playlist->addTrack(track);
+
+            if(rowTo >= 0)
+            {
+                commandStack.push(new AddTrackCommand(this, *track, rowTo++));
+            }
+            else
+            {
+                int row = rowCount();
+                commandStack.push(new AddTrackCommand(this, *track, row));
+            }
+            commandStack.redo();
+
+            numberOfFilesAdded++;
+        }
+    }
+
+    if(numberOfFilesAdded > 0)
+    {
+        undoNumberOfSteps.push(numberOfFilesAdded);
+        event->acceptProposedAction();
+    }
+    else
+    {
+        event->ignore();
+    }
 }
