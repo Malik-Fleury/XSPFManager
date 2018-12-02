@@ -17,6 +17,7 @@ PlaylistTableWidget::~PlaylistTableWidget()
 void PlaylistTableWidget::fill(Playlist* playlist)
 {
     this->playlist = playlist;
+    this->clearContents();
 
     for(auto itr = playlist->getConstBegin(); itr != playlist->getConstEnd(); itr++)
     {
@@ -50,7 +51,6 @@ void PlaylistTableWidget::removeTrack()
     for(int index = 0;index < totalItems; index += totalColumn)
     {
         int row = selectionIndexes[index].row();
-        qDebug() << row;
 
         QTableWidget::removeRow(row);
         playlist->removeTrack(row);
@@ -69,9 +69,6 @@ void PlaylistTableWidget::dragMoveEvent(QDragMoveEvent* event)
 
 void PlaylistTableWidget::dropEvent(QDropEvent* event)
 {
-    const QMimeData* mimeData = event->mimeData();
-    QFileInfo fileInfo;
-
     if(event->source() == this)
     {
         event->setDropAction(Qt::MoveAction);
@@ -79,30 +76,14 @@ void PlaylistTableWidget::dropEvent(QDropEvent* event)
     }
     else
     {
-
-        for(QUrl url: mimeData->urls())
-        {
-            QString urlStr = url.toString();
-            fileInfo.setFile(urlStr);
-
-            if(listFormats.contains(fileInfo.suffix()))
-            {
-                QString absoluteFilePath = urlStr.replace("file:///", "");
-
-                Track* track = new Track(absoluteFilePath);
-                playlist->addTrack(track);
-                this->addTrack(track);
-
-                event->acceptProposedAction();
-            }
-        }
+        this->addFromOutside(event);
     }
 }
 
 void PlaylistTableWidget::move(QDropEvent* event)
 {
     QModelIndexList selectionIndexes = this->selectedIndexes();
-    int totalColumns = this->columnCount();
+    int totalColumns = selectionIndexes.count();
     int rowTo = this->rowAt(event->pos().y());
 
     for(int index = 0;index < totalColumns; index+=3)
@@ -111,6 +92,7 @@ void PlaylistTableWidget::move(QDropEvent* event)
         {
             int rowFrom = selectionIndexes[index].row();
 
+            qDebug() << rowFrom << ":" << rowTo;
             playlist->move(rowFrom, rowTo);
             QList<QTableWidgetItem*> rowItems = this->takeRow(rowFrom);
 
@@ -123,6 +105,28 @@ void PlaylistTableWidget::move(QDropEvent* event)
             event->ignore();
         }
     }
+}
+
+void PlaylistTableWidget::addFromOutside(QDropEvent* event)
+{
+    const QMimeData* mimeData = event->mimeData();
+    QFileInfo fileInfo;
+
+    for(QUrl url: mimeData->urls())
+    {
+        QString urlStr = url.toString();
+        fileInfo.setFile(urlStr);
+
+        if(listFormats.contains(fileInfo.suffix()))
+        {
+            QString absoluteFilePath = urlStr.replace("file:///", "");
+
+            Track* track = new Track(absoluteFilePath);
+            playlist->addTrack(track);
+            this->addTrack(track);
+        }
+    }
+    event->acceptProposedAction();
 }
 
 void PlaylistTableWidget::setRow(int row, const QList<QTableWidgetItem*>& rowItems)

@@ -14,7 +14,7 @@ public:
 
     void addTrack(Track* track);
     void removeTrack();
-    void move(QDropEvent* event);
+
     QList<QTableWidgetItem*> takeRow(int row);
     void setRow(int row, const QList<QTableWidgetItem*>& rowItems);
 
@@ -27,6 +27,8 @@ private:
     void configureHeaders();
     void configureTable();
     void setupFormats();
+    void move(QDropEvent* event);
+    void addFromOutside(QDropEvent* event);
 
 private:
     Playlist* playlist;
