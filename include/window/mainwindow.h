@@ -6,7 +6,7 @@
 #include "include/widgets/panelexport.h"
 #include "ui_mainwindow.h"
 #include "include/tools/xspf.h"
-#include "include/widgets/table/PlaylistTableWidget.h"
+#include "include/widgets/table/playlisttablewidget.h"
 
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
