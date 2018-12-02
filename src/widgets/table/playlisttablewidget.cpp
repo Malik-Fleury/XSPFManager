@@ -26,11 +26,16 @@ void PlaylistTableWidget::fill(Playlist* playlist)
     }
 }
 
-void PlaylistTableWidget::addTrack(Track* track)
+void PlaylistTableWidget::addTrack(Track* track, int position)
 {
     int totalHeaders = this->columnCount();
-    int rowNumber = this->rowCount();
+    int rowNumber = position;
 
+    // If -1 and smaller, add the track to the end
+    if(rowNumber < 0)
+    {
+        rowNumber = this->rowCount();
+    }
     this->insertRow(rowNumber);
 
     QTableWidgetItem* filenameItem = new QTableWidgetItem(track->getFilename());
@@ -42,7 +47,7 @@ void PlaylistTableWidget::addTrack(Track* track)
     this->setItem(rowNumber, 2, relativePathItem);
 }
 
-void PlaylistTableWidget::removeTrack()
+void PlaylistTableWidget::removeSelectedTracks()
 {
     int totalColumn = this->columnCount();
     QModelIndexList selectionIndexes = this->selectedIndexes();
@@ -51,10 +56,24 @@ void PlaylistTableWidget::removeTrack()
     for(int index = 0;index < totalItems; index += totalColumn)
     {
         int row = selectionIndexes[index].row();
-
-        QTableWidget::removeRow(row);
-        playlist->removeTrack(row);
+        this->removeTrack(row);
     }
+}
+
+void PlaylistTableWidget::removeTrack(int row)
+{
+    QTableWidget::removeRow(row);
+    playlist->removeTrack(row);
+}
+
+void PlaylistTableWidget::moveTrack(int rowFrom, int rowTo)
+{
+    playlist->move(rowFrom, rowTo);
+    QList<QTableWidgetItem*> rowItems = this->takeRow(rowFrom);
+
+    this->removeRow(rowFrom);
+    this->insertRow(rowTo);
+    this->setRow(rowTo, rowItems);
 }
 
 void PlaylistTableWidget::dragEnterEvent(QDragEnterEvent* event)
@@ -76,7 +95,7 @@ void PlaylistTableWidget::dropEvent(QDropEvent* event)
     }
     else
     {
-        this->addFromOutside(event);
+        this->addTracksFromOutside(event);
     }
 }
 
@@ -88,28 +107,24 @@ void PlaylistTableWidget::move(QDropEvent* event)
 
     for(int index = 0;index < totalItems; index += this->columnCount())
     {
-        if(rowTo != -1)
+        int rowFrom = selectionIndexes[index].row();
+
+        if(rowTo >= 0)
         {
-            int rowFrom = selectionIndexes[index].row();
-
-            playlist->move(rowFrom, rowTo);
-            QList<QTableWidgetItem*> rowItems = this->takeRow(rowFrom);
-
-            this->removeRow(rowFrom);
-            this->insertRow(rowTo);
-            this->setRow(rowTo, rowItems);
+            this->moveTrack(rowFrom, rowTo++);
         }
         else
         {
-            event->ignore();
+            this->moveTrack(rowFrom, this->rowCount()-1);
         }
     }
 }
 
-void PlaylistTableWidget::addFromOutside(QDropEvent* event)
+void PlaylistTableWidget::addTracksFromOutside(QDropEvent* event)
 {
     const QMimeData* mimeData = event->mimeData();
     QFileInfo fileInfo;
+    int rowTo = this->rowAt(event->pos().y());
 
     for(QUrl url: mimeData->urls())
     {
@@ -122,7 +137,15 @@ void PlaylistTableWidget::addFromOutside(QDropEvent* event)
 
             Track* track = new Track(absoluteFilePath);
             playlist->addTrack(track);
-            this->addTrack(track);
+
+            if(rowTo >= 0)
+            {
+                this->addTrack(track, rowTo++);
+            }
+            else
+            {
+                this->addTrack(track);
+            }
         }
     }
     event->acceptProposedAction();
