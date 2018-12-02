@@ -49,7 +49,6 @@ Playlist* Xspf::readPlaylist()
     Playlist* playlist = new Playlist(this->getBaseUri());
 
     QString filePath = fileInfo.absolutePath();
-    qDebug() << filePath;
     this->getTracks(filePath, *playlist);
 
     return playlist;
