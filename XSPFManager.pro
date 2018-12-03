@@ -49,6 +49,9 @@ HEADERS += \
     include/commands/movetrackcommand.h \
     include/commands/removetrackcommand.h
 
+TRANSLATIONS = xspfmanager_en.ts \
+        xspfmanager_fr.ts
+
 FORMS += \
     res/window/mainwindow.ui \
     res/widgets/panelexport.ui
