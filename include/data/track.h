@@ -25,14 +25,8 @@ public:
 
     static QString generateAbsolutePath(QString baseUri, QString relativePath);
 
-    //void addData(QString key, QString data);
-    //QString getDataFromKey(QString& key);
-    //QMap<QString, QString>::key_iterator getConstBegin();
-    //7QMap<QString, QString>::key_iterator getConstEnd();
-
 private:
     QFileInfo fileInfo;
-    //QMap<QString, QString>* dataMap;
 };
 
 #endif // TRACK_H
