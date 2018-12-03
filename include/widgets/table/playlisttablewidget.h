@@ -23,6 +23,7 @@ public:
     void removeTrack(int row);
     void moveTrack(int rowFrom, int rowTo);
 
+    void addRow(Track* track, int rowNumber = -1);
     QList<QTableWidgetItem*> takeRow(int row);
     void setRow(int row, const QList<QTableWidgetItem*>& rowItems);
 

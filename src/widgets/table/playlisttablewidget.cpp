@@ -22,7 +22,7 @@ void PlaylistTableWidget::fill(Playlist* playlist)
     for(auto itr = playlist->getConstBegin(); itr != playlist->getConstEnd(); itr++)
     {
         Track* track = (Track*)*itr;
-        this->addTrack(track);
+        this->addRow(track);
     }
 }
 
@@ -36,15 +36,9 @@ void PlaylistTableWidget::addTrack(Track* track, int position)
     {
         rowNumber = this->rowCount();
     }
-    this->insertRow(rowNumber);
 
-    QTableWidgetItem* filenameItem = new QTableWidgetItem(track->getFilename());
-    QTableWidgetItem* absolutePathItem = new QTableWidgetItem(track->getAbsoluteFilePath());
-    QTableWidgetItem* relativePathItem = new QTableWidgetItem(track->getAbsoluteFilePath());
-
-    this->setItem(rowNumber, 0, filenameItem);
-    this->setItem(rowNumber, 1, absolutePathItem);
-    this->setItem(rowNumber, 2, relativePathItem);
+    addRow(track, rowNumber);
+    playlist->addTrack(track);
 }
 
 void PlaylistTableWidget::removeSelectedTracks()
@@ -132,6 +126,25 @@ void PlaylistTableWidget::redo()
             commandStack.redo();
         }
     }
+}
+
+void PlaylistTableWidget::addRow(Track* track, int rowNumber)
+{
+    // If -1 and smaller, add the track to the end
+    if(rowNumber < 0)
+    {
+        rowNumber = this->rowCount();
+    }
+
+    this->insertRow(rowNumber);
+
+    QTableWidgetItem* filenameItem = new QTableWidgetItem(track->getFilename());
+    QTableWidgetItem* absolutePathItem = new QTableWidgetItem(track->getAbsoluteFilePath());
+    QTableWidgetItem* relativePathItem = new QTableWidgetItem(track->getAbsoluteFilePath());
+
+    this->setItem(rowNumber, 0, filenameItem);
+    this->setItem(rowNumber, 1, absolutePathItem);
+    this->setItem(rowNumber, 2, relativePathItem);
 }
 
 void PlaylistTableWidget::setRow(int row, const QList<QTableWidgetItem*>& rowItems)
