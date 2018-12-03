@@ -33,7 +33,10 @@ void MainWindow::setupMenuActions()
     connect(menuEditRemoveSel, &QAction::triggered, playlistTable, &PlaylistTableWidget::removeSelectedTracks);
 
     // Language
-    // Not available now
+    languagesActGroup = new QActionGroup(this);
+    languagesActGroup->addAction(this->actionEnglish);
+    languagesActGroup->addAction(this->actionFrench);
+    connect(languagesActGroup, &QActionGroup::triggered, this, &MainWindow::changeLanguage);
 
     // Help
     connect(menuHelpAbout, &QAction::triggered, this, &MainWindow::about);
@@ -111,6 +114,29 @@ void MainWindow::saveAs()
     {
         this->path = fileToSave;
         this->save();
+    }
+}
+
+void MainWindow::loadLanguage(const QString& languageFile)
+{
+    QApplication* app = (QApplication*)QApplication::instance();
+    QTranslator translator;
+    translator.load(languageFile);
+    app->installTranslator(&translator);
+
+    this->retranslateUi(this);
+    this->panelExport->retranslateUi(panelExport);
+}
+
+void MainWindow::changeLanguage(QAction* action)
+{
+    if(action == actionFrench)
+    {
+        this->loadLanguage(FRENCH_FILE);
+    }
+    else if(action == actionEnglish)
+    {
+        this->loadLanguage(ENGLISH_FILE);
     }
 }
 

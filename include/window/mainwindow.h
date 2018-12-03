@@ -29,6 +29,9 @@ private:
     void save();
     void saveAs();
 
+    void loadLanguage(const QString& languageFile);
+    void changeLanguage(QAction* action);
+
     void about();
 
     void freeMemoryPlaylist();
@@ -37,12 +40,16 @@ private slots:
     void dropEventHandler(QDropEvent* event);
 
 private:
+    QActionGroup* languagesActGroup;
     PlaylistTableWidget* playlistTable;
     PanelExport* panelExport;
 
     Xspf xspf;
     QString path;
     Playlist* playlist;
+
+    const QString FRENCH_FILE = "xspfmanager_fr.qm";
+    const QString ENGLISH_FILE = "xspfmanager_en.qm";
 };
 
 #endif // MAINWINDOW_H
