@@ -17,7 +17,6 @@ PlaylistTableWidget::~PlaylistTableWidget()
 void PlaylistTableWidget::fill(Playlist* playlist)
 {
     this->playlist = playlist;
-    this->clearContents();
 
     for(auto itr = playlist->getConstBegin(); itr != playlist->getConstEnd(); itr++)
     {
@@ -91,7 +90,7 @@ void PlaylistTableWidget::dropEvent(QDropEvent* event)
 {
     if(event->source() == this)
     {
-        event->setDropAction(Qt::MoveAction);
+        //event->setDropAction(Qt::MoveAction);
         this->move(event);
     }
     else
@@ -191,6 +190,7 @@ void PlaylistTableWidget::configureTable()
 
     this->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->setShowGrid(false);
+    this->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 void PlaylistTableWidget::setupFormats()
@@ -246,7 +246,6 @@ void PlaylistTableWidget::addTracksFromOutside(QDropEvent* event)
             QString absoluteFilePath = urlStr.replace("file:///", "");
 
             Track* track = new Track(absoluteFilePath);
-            playlist->addTrack(track);
 
             if(rowTo >= 0)
             {
