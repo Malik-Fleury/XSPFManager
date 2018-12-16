@@ -90,18 +90,11 @@ void PlaylistTableWidget::dropEvent(QDropEvent* event)
 {
     if(event->source() == this)
     {
-        //event->setDropAction(Qt::MoveAction);
         this->move(event);
     }
     else
     {
         QList<QUrl> urls = event->mimeData()->urls();
-
-        for(QUrl url : urls)
-        {
-            qDebug() << url.toLocalFile();
-        }
-
         this->addTracksFromOutside(event);
     }
 }
@@ -111,8 +104,8 @@ void PlaylistTableWidget::undo()
     if(commandStack.canUndo())
     {
         int undoSteps = undoNumberOfSteps.pop();
-        redoNumberOfSteps.enqueue(undoSteps);
-
+        redoNumberOfSteps.push(undoSteps);
+        qDebug() << undoSteps;
         for(int counterStep = 0;counterStep < undoSteps; counterStep++)
         {
             commandStack.undo();
@@ -124,13 +117,25 @@ void PlaylistTableWidget::redo()
 {
     if(commandStack.canRedo())
     {
-        int redoSteps = redoNumberOfSteps.dequeue();
+        int redoSteps = redoNumberOfSteps.pop();
         undoNumberOfSteps.push(redoSteps);
-
+        qDebug() << redoSteps;
         for(int counterStep = 0;counterStep < redoSteps; counterStep++)
         {
             commandStack.redo();
         }
+    }
+}
+
+void PlaylistTableWidget::updateOutputFields(QString playlistOutputFilePath)
+{
+    int columnOutputAbsFilePath = 2;
+
+    for(int row = 0;row < this->rowCount(); row++)
+    {
+        Track* track = playlist->getTrack(row);
+        QTableWidgetItem* item = this->item(row, columnOutputAbsFilePath);
+        item->setText(playlistOutputFilePath + "/" + track->getFilename());
     }
 }
 
@@ -146,11 +151,13 @@ void PlaylistTableWidget::addRow(Track* track, int rowNumber)
 
     QTableWidgetItem* filenameItem = new QTableWidgetItem(track->getFilename());
     QTableWidgetItem* absolutePathItem = new QTableWidgetItem(track->getAbsoluteFilePath());
-    QTableWidgetItem* relativePathItem = new QTableWidgetItem(track->getAbsoluteFilePath());
+    QTableWidgetItem* outputAbsFilePathItem = new QTableWidgetItem(track->getOutputAbsolutePath());
+    QTableWidgetItem* outputRelFilePathItem = new QTableWidgetItem(track->getOutputAbsolutePath());
 
     this->setItem(rowNumber, 0, filenameItem);
     this->setItem(rowNumber, 1, absolutePathItem);
-    this->setItem(rowNumber, 2, relativePathItem);
+    this->setItem(rowNumber, 2, outputAbsFilePathItem);
+    this->setItem(rowNumber, 3, outputRelFilePathItem);
 }
 
 void PlaylistTableWidget::setRow(int row, const QList<QTableWidgetItem*>& rowItems)
@@ -174,7 +181,7 @@ QList<QTableWidgetItem*> PlaylistTableWidget::takeRow(int row)
 void PlaylistTableWidget::configureHeaders()
 {
     QStringList headers;
-    headers << "Filename" << "Absolute path" << "Relative path";
+    headers << "Filename" << "Input absolute path" << "Output absolute path" << "Output relative path";
 
     for(int counter = 0;counter < headers.size(); counter++)
     {

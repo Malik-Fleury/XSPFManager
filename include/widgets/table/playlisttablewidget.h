@@ -35,6 +35,8 @@ public slots:
     void undo();
     void redo();
 
+    void updateOutputFields(QString playlistOutputFilePath);
+
 private:
     void configureHeaders();
     void configureTable();
@@ -50,7 +52,7 @@ private:
 
     QUndoStack commandStack;
     QStack<int> undoNumberOfSteps;
-    QQueue<int> redoNumberOfSteps;
+    QStack<int> redoNumberOfSteps;
 };
 
 #include "include/commands/addtrackcommand.h"
