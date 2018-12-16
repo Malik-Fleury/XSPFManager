@@ -95,6 +95,13 @@ void PlaylistTableWidget::dropEvent(QDropEvent* event)
     }
     else
     {
+        QList<QUrl> urls = event->mimeData()->urls();
+
+        for(QUrl url : urls)
+        {
+            qDebug() << url.toLocalFile();
+        }
+
         this->addTracksFromOutside(event);
     }
 }
@@ -215,13 +222,12 @@ void PlaylistTableWidget::move(QDropEvent* event)
         if(rowTo >= 0)
         {
             commandStack.push(new MoveTrackCommand(this, rowFrom, rowTo++));
-            commandStack.redo();
         }
         else
         {
             commandStack.push(new MoveTrackCommand(this, rowFrom, this->rowCount()-1));
-            commandStack.redo();
         }
+        commandStack.redo();
     }
 
     undoNumberOfSteps.push(numberOfFiles);
@@ -229,6 +235,70 @@ void PlaylistTableWidget::move(QDropEvent* event)
     event->accept();
 }
 
+void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
+{
+    const QMimeData* mimeData = event->mimeData();
+    QFileInfo fileInfo;
+    int rowTo = this->rowAt(event->pos().y());
+    int numberOfFilesAdded = 0;
+
+    for(QUrl url: mimeData->urls())
+    {
+        fileInfo.setFile(url.toLocalFile());
+
+        if(fileInfo.isDir())
+        {
+            qDebug() << "Is a folder";
+            QDir directory = fileInfo.dir();
+            QFileInfoList fileInfoList = directory.entryInfoList();
+
+            qDebug() << fileInfoList.length();
+            for(QFileInfo fileInfo: fileInfoList)
+            {
+                qDebug() << "File ADDED";
+                this->addTrackDragAndDrop(fileInfo, rowTo++);
+                numberOfFilesAdded++;
+            }
+        }
+        else
+        {
+            this->addTrackDragAndDrop(fileInfo, rowTo++);
+            numberOfFilesAdded++;
+        }
+    }
+
+    if(numberOfFilesAdded > 0)
+    {
+        undoNumberOfSteps.push(numberOfFilesAdded);
+        redoNumberOfSteps.clear();
+        event->acceptProposedAction();
+    }
+    else
+    {
+        event->ignore();
+    }
+}
+
+void PlaylistTableWidget::addTrackDragAndDrop(QFileInfo& fileInfo, int rowTo)
+{
+    if(fileInfo.isFile() && listFormats.contains(fileInfo.suffix()))
+    {
+        QString absoluteFilePath = fileInfo.absoluteFilePath();
+        Track* track = new Track(absoluteFilePath);
+
+        if(rowTo >= 0)
+        {
+            commandStack.push(new AddTrackCommand(this, *track, rowTo++));
+        }
+        else
+        {
+            commandStack.push(new AddTrackCommand(this, *track, rowCount()));
+        }
+        commandStack.redo();
+    }
+}
+
+/*
 void PlaylistTableWidget::addTracksFromOutside(QDropEvent* event)
 {
     QFileInfo fileInfo;
@@ -273,3 +343,4 @@ void PlaylistTableWidget::addTracksFromOutside(QDropEvent* event)
         event->ignore();
     }
 }
+*/
