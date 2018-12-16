@@ -18,6 +18,9 @@ public:
     Playlist* getPlaylist();
     void setPlaylist(Playlist* playlist);
 
+signals:
+    void playlistOutputUpdated(QString playlistOutputFilePath);
+
 private:
     void setupActions();
 

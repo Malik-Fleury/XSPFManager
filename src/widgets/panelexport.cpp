@@ -35,6 +35,8 @@ void PanelExport::chooseOutputFile()
     if(!outputFilePath.isEmpty())
     {
         this->lineEditOutputFile->setText(outputFilePath);
+
+        emit playlistOutputUpdated(outputFilePath);
     }
 }
 
