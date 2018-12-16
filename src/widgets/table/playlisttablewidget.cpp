@@ -233,13 +233,6 @@ void PlaylistTableWidget::move(QDropEvent* event)
     undoNumberOfSteps.push(numberOfFiles);
     redoNumberOfSteps.clear();
     event->accept();
-
-    qDebug() << "--------------------";
-    for(auto ptr = playlist->getConstBegin(); ptr != playlist->getConstEnd(); ptr++)
-    {
-        Track* track = (Track*)*ptr;
-        qDebug() << track->getFilename();
-    }
 }
 
 void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
