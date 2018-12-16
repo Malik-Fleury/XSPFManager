@@ -1,17 +1,18 @@
 #include "include/data/track.h"
 
-Track::Track(QString absoluteFilePath): fileInfo(absoluteFilePath)
+Track::Track(QString absoluteFilePath): fileInfo(absoluteFilePath), fileOutput(fileInfo.fileName())
 {
 }
 
 Track::Track(QString uriBase, QString relativePath):
-    fileInfo(Track::generateAbsolutePath(uriBase, relativePath))
+    Track(Track::generateAbsolutePath(uriBase, relativePath))
 {
 }
 
 Track::Track(Track& trackSource)
 {
     this->fileInfo = trackSource.fileInfo;
+    this->fileOutput = trackSource.fileOutput;
 }
 
 Track::~Track()
@@ -41,6 +42,16 @@ QString Track::getAbsolutePath()
 QString Track::getRelativeFilePath(QDir& absolutePathDir)
 {
     return absolutePathDir.relativeFilePath(this->getFilename());
+}
+
+QString Track::getOutputRelativeFilePath()
+{
+    return this->fileOutput.filePath();
+}
+
+void Track::setOutputRelativeFilePath(QString outputRelFilePath)
+{
+    this->fileOutput.setFile(outputRelFilePath);
 }
 
 QString Track::generateAbsolutePath(QString baseUri, QString relativePath)

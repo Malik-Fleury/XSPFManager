@@ -20,13 +20,16 @@ public:
     QString getAbsolutePath();
     QString getAbsoluteFilePath();
     QString getRelativeFilePath(QDir& absolutePathDir);
-
     void setAbsoluteFilePath(QString absoluteFilePath);
+
+    QString getOutputRelativeFilePath();
+    void setOutputRelativeFilePath(QString outputRelFilePath);
 
     static QString generateAbsolutePath(QString baseUri, QString relativePath);
 
 private:
     QFileInfo fileInfo;
+    QFileInfo fileOutput;
 };
 
 #endif // TRACK_H
