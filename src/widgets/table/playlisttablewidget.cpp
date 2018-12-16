@@ -233,6 +233,13 @@ void PlaylistTableWidget::move(QDropEvent* event)
     undoNumberOfSteps.push(numberOfFiles);
     redoNumberOfSteps.clear();
     event->accept();
+
+    qDebug() << "--------------------";
+    for(auto ptr = playlist->getConstBegin(); ptr != playlist->getConstEnd(); ptr++)
+    {
+        Track* track = (Track*)*ptr;
+        qDebug() << track->getFilename();
+    }
 }
 
 void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
@@ -261,8 +268,8 @@ void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
             }
         }
         else
-        {
-            this->addTrackDragAndDrop(fileInfo, rowTo++);
+        {   
+            this->addTrackDragAndDrop(fileInfo, ++rowTo);
             numberOfFilesAdded++;
         }
     }
@@ -288,7 +295,7 @@ void PlaylistTableWidget::addTrackDragAndDrop(QFileInfo& fileInfo, int rowTo)
 
         if(rowTo >= 0)
         {
-            commandStack.push(new AddTrackCommand(this, *track, rowTo++));
+            commandStack.push(new AddTrackCommand(this, *track, rowTo));
         }
         else
         {
