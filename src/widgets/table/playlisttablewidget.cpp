@@ -143,6 +143,23 @@ void PlaylistTableWidget::updateOutputFields(QString playlistOutputFilePath)
     }
 }
 
+void PlaylistTableWidget::sortColumn(int logicalIndex)
+{
+    qDebug() << "OK";
+}
+
+void PlaylistTableWidget::sortChanged(int logicalIndex, Qt::SortOrder order)
+{
+    qDebug() << "test";
+    playlist->sort(Sorting::FILENAME);
+
+    for(auto itr = playlist->getConstBegin(); itr != playlist->getConstEnd(); itr++)
+    {
+        Track* track = (Track*)*itr;
+        qDebug() << track->getFilename();
+    }
+}
+
 void PlaylistTableWidget::addRow(Track* track, int rowNumber)
 {
     // If -1 and smaller, add the track to the end
@@ -209,6 +226,10 @@ void PlaylistTableWidget::configureTable()
     this->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->setShowGrid(false);
     this->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    this->horizontalHeader()->setSortIndicatorShown(true);
+
+    //connect(this->horizontalHeader(), &QHeaderView::sectionClicked, this, &PlaylistTableWidget::sortColumn);
+    connect(this->horizontalHeader(), &QHeaderView::sortIndicatorChanged, this, &PlaylistTableWidget::sortChanged);
 }
 
 void PlaylistTableWidget::setupFormats()
