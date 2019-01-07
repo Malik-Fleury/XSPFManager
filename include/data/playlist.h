@@ -4,6 +4,14 @@
 #include <QString>
 #include <QList>
 #include "include/data/track.h"
+#include "include/widgets/table/comparators.h"
+
+enum Sorting
+{
+    FILENAME = 0,
+    ABSOLUTE_FILE_PATH = 1,
+    RELATIVE_FILE_PATH = 2
+};
 
 class Playlist
 {
@@ -22,6 +30,7 @@ public:
     int getNumberOfTracks();
     bool existsBaseUri();
     void move(int from, int to);
+    void sort(Sorting sorting);
 
     QList<Track*>::const_iterator getConstIterator();
     QList<Track*>::const_iterator getConstBegin();

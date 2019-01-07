@@ -77,6 +77,20 @@ void Playlist::move(int from, int to)
     this->tracksList.move(from, to);
 }
 
+void Playlist::sort(Sorting sorting)
+{
+    switch(sorting)
+    {
+        case FILENAME:
+            std::sort(tracksList.begin(), tracksList.end(), Comparators::compareFilename);
+            break;
+        case ABSOLUTE_FILE_PATH:
+            break;
+        case RELATIVE_FILE_PATH:
+            break;
+    }
+}
+
 QList<Track*>::const_iterator Playlist::getConstBegin()
 {
     return tracksList.constBegin();
