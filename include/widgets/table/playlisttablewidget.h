@@ -44,7 +44,6 @@ private:
     void move(QDropEvent* event);
     void addTracksFromOutside(QDropEvent* event);
     void addTrackDragAndDrop(QFileInfo& fileInfo, int rowTo);
-    void removeSteps();
 
 private:
     Playlist* playlist;
