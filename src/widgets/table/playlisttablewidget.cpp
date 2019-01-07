@@ -257,22 +257,24 @@ void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
     {
         fileInfo.setFile(url.toLocalFile());
 
+        // If the url is a folder, use QDirIterator to look for files recursively
         if(fileInfo.isDir())
         {
-            qDebug() << "Is a folder";
-            QDir directory = fileInfo.dir();
-            QFileInfoList fileInfoList = directory.entryInfoList();
+            QDirIterator it(fileInfo.filePath(), QStringList() << "*.m3u8", QDir::Files, QDirIterator::Subdirectories);
+            QFileInfo currentFileInfo;
 
-            qDebug() << fileInfoList.length();
-            for(QFileInfo fileInfo: fileInfoList)
+            while(it.hasNext())
             {
-                qDebug() << "File ADDED";
-                this->addTrackDragAndDrop(fileInfo, rowTo++);
+                currentFileInfo.setFile(it.next());
+                this->addTrackDragAndDrop(currentFileInfo, rowTo);
+                rowTo = rowTo < 0 ? rowTo+2:rowTo+1;
+
                 numberOfFilesAdded++;
             }
         }
+        // If the url is a file, add it to the table directly
         else
-        {   
+        {
             this->addTrackDragAndDrop(fileInfo, rowTo);
             rowTo = rowTo < 0 ? rowTo+2:rowTo+1;
 
