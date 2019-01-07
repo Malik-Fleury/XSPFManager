@@ -35,6 +35,8 @@ public slots:
     void undo();
     void redo();
 
+    void updateOutputFields(QString playlistOutputFilePath);
+
 private:
     void configureHeaders();
     void configureTable();
@@ -42,7 +44,6 @@ private:
     void move(QDropEvent* event);
     void addTracksFromOutside(QDropEvent* event);
     void addTrackDragAndDrop(QFileInfo& fileInfo, int rowTo);
-    void removeSteps();
 
 private:
     Playlist* playlist;
@@ -50,7 +51,7 @@ private:
 
     QUndoStack commandStack;
     QStack<int> undoNumberOfSteps;
-    QQueue<int> redoNumberOfSteps;
+    QStack<int> redoNumberOfSteps;
 };
 
 #include "include/commands/addtrackcommand.h"

@@ -10,6 +10,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setupPlaylistTable();
     setupPanelExport();
     setupMenuActions();
+    setupOtherEvents();
 
     enableWidgets(false);
 }
@@ -44,7 +45,7 @@ void MainWindow::setupMenuActions()
 
 void MainWindow::setupOtherEvents()
 {
-    //connect(this->playlistTableView, &QTableView::)
+    connect(panelExport, &PanelExport::playlistOutputUpdated, playlistTable, &PlaylistTableWidget::updateOutputFields);
 }
 
 void MainWindow::setupPlaylistTable()

@@ -90,18 +90,11 @@ void PlaylistTableWidget::dropEvent(QDropEvent* event)
 {
     if(event->source() == this)
     {
-        //event->setDropAction(Qt::MoveAction);
         this->move(event);
     }
     else
     {
         QList<QUrl> urls = event->mimeData()->urls();
-
-        for(QUrl url : urls)
-        {
-            qDebug() << url.toLocalFile();
-        }
-
         this->addTracksFromOutside(event);
     }
 }
@@ -111,8 +104,8 @@ void PlaylistTableWidget::undo()
     if(commandStack.canUndo())
     {
         int undoSteps = undoNumberOfSteps.pop();
-        redoNumberOfSteps.enqueue(undoSteps);
-
+        redoNumberOfSteps.push(undoSteps);
+        qDebug() << undoSteps;
         for(int counterStep = 0;counterStep < undoSteps; counterStep++)
         {
             commandStack.undo();
@@ -124,13 +117,29 @@ void PlaylistTableWidget::redo()
 {
     if(commandStack.canRedo())
     {
-        int redoSteps = redoNumberOfSteps.dequeue();
+        int redoSteps = redoNumberOfSteps.pop();
         undoNumberOfSteps.push(redoSteps);
-
+        qDebug() << redoSteps;
         for(int counterStep = 0;counterStep < redoSteps; counterStep++)
         {
             commandStack.redo();
         }
+    }
+}
+
+void PlaylistTableWidget::updateOutputFields(QString playlistOutputFilePath)
+{
+    int columnOutputAbsFilePath = 2;
+    int columnOutputRelFilePath = 3;
+
+    for(int row = 0;row < this->rowCount(); row++)
+    {
+        Track* track = playlist->getTrack(row);
+        QTableWidgetItem* itemOutputAbsFilePath = this->item(row, columnOutputAbsFilePath);
+        QTableWidgetItem* itemOutputRelFilePath = this->item(row, columnOutputRelFilePath);
+
+        itemOutputAbsFilePath->setText(playlistOutputFilePath + "/" + track->getOutputRelativeFilePath());
+        itemOutputRelFilePath->setText(track->getOutputRelativeFilePath());
     }
 }
 
@@ -146,11 +155,13 @@ void PlaylistTableWidget::addRow(Track* track, int rowNumber)
 
     QTableWidgetItem* filenameItem = new QTableWidgetItem(track->getFilename());
     QTableWidgetItem* absolutePathItem = new QTableWidgetItem(track->getAbsoluteFilePath());
-    QTableWidgetItem* relativePathItem = new QTableWidgetItem(track->getAbsoluteFilePath());
+    QTableWidgetItem* outputAbsFilePathItem = new QTableWidgetItem("");
+    QTableWidgetItem* outputRelFilePathItem = new QTableWidgetItem("");
 
     this->setItem(rowNumber, 0, filenameItem);
     this->setItem(rowNumber, 1, absolutePathItem);
-    this->setItem(rowNumber, 2, relativePathItem);
+    this->setItem(rowNumber, 2, outputAbsFilePathItem);
+    this->setItem(rowNumber, 3, outputRelFilePathItem);
 }
 
 void PlaylistTableWidget::setRow(int row, const QList<QTableWidgetItem*>& rowItems)
@@ -174,7 +185,7 @@ QList<QTableWidgetItem*> PlaylistTableWidget::takeRow(int row)
 void PlaylistTableWidget::configureHeaders()
 {
     QStringList headers;
-    headers << "Filename" << "Absolute path" << "Relative path";
+    headers << "Filename" << "Input absolute path" << "Output absolute path" << "Output relative path";
 
     for(int counter = 0;counter < headers.size(); counter++)
     {
@@ -233,13 +244,6 @@ void PlaylistTableWidget::move(QDropEvent* event)
     undoNumberOfSteps.push(numberOfFiles);
     redoNumberOfSteps.clear();
     event->accept();
-
-    qDebug() << "--------------------";
-    for(auto ptr = playlist->getConstBegin(); ptr != playlist->getConstEnd(); ptr++)
-    {
-        Track* track = (Track*)*ptr;
-        qDebug() << track->getFilename();
-    }
 }
 
 void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
@@ -253,23 +257,27 @@ void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
     {
         fileInfo.setFile(url.toLocalFile());
 
+        // If the url is a folder, use QDirIterator to look for files recursively
         if(fileInfo.isDir())
         {
-            qDebug() << "Is a folder";
-            QDir directory = fileInfo.dir();
-            QFileInfoList fileInfoList = directory.entryInfoList();
+            QDirIterator it(fileInfo.filePath(), QStringList() << "*.m3u8", QDir::Files, QDirIterator::Subdirectories);
+            QFileInfo currentFileInfo;
 
-            qDebug() << fileInfoList.length();
-            for(QFileInfo fileInfo: fileInfoList)
+            while(it.hasNext())
             {
-                qDebug() << "File ADDED";
-                this->addTrackDragAndDrop(fileInfo, rowTo++);
+                currentFileInfo.setFile(it.next());
+                this->addTrackDragAndDrop(currentFileInfo, rowTo);
+                rowTo = rowTo < 0 ? rowTo+2:rowTo+1;
+
                 numberOfFilesAdded++;
             }
         }
+        // If the url is a file, add it to the table directly
         else
-        {   
-            this->addTrackDragAndDrop(fileInfo, ++rowTo);
+        {
+            this->addTrackDragAndDrop(fileInfo, rowTo);
+            rowTo = rowTo < 0 ? rowTo+2:rowTo+1;
+
             numberOfFilesAdded++;
         }
     }
