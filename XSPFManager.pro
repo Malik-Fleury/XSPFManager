@@ -47,7 +47,8 @@ HEADERS += \
     include/widgets/table/playlisttablewidget.h \
     include/commands/addtrackcommand.h \
     include/commands/movetrackcommand.h \
-    include/commands/removetrackcommand.h
+    include/commands/removetrackcommand.h \
+    include/widgets/table/comparators.h
 
 TRANSLATIONS = xspfmanager_en.ts \
         xspfmanager_fr.ts
