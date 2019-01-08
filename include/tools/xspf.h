@@ -6,6 +6,12 @@
 
 #include "include/data/playlist.h"
 
+/**
+* Classe permettant de lire et écrire une liste de lecture XSPF
+*
+* @author	Malik Fleury
+* @version	1
+*/
 class Xspf
 {
 public:

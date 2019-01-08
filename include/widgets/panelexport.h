@@ -7,6 +7,13 @@
 #include "include/tools/xspf.h"
 #include "ui_panelexport.h"
 
+
+/**
+* Classe représentant le panneau d'exportation. Il permet de définir où le fichiers XSPF et médias seront copiés
+*
+* @author	Malik Fleury
+* @version	1
+*/
 class PanelExport : public QWidget, public Ui::panelExport
 {
     Q_OBJECT

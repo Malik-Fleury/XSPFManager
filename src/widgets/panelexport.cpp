@@ -1,6 +1,12 @@
 #include "include/widgets/panelexport.h"
 #include "ui_panelexport.h"
 
+/**
+* PanelExport
+* Constructeur par défaut
+*
+* @param QWidget* parent : parent du composant
+*/
 PanelExport::PanelExport(QWidget *parent) :
     QWidget(parent)
 {
@@ -8,6 +14,11 @@ PanelExport::PanelExport(QWidget *parent) :
     this->setupActions();
 }
 
+
+/**
+* ~PanelExport
+* Destructeur par défaut
+*/
 PanelExport::~PanelExport()
 {
 }
@@ -17,17 +28,31 @@ Playlist* PanelExport::getPlaylist()
     return this->playlist;
 }
 
+/**
+* setPlaylist
+* Permet de définir de passer une liste de lecture
+*
+* @param Playlist* playlist : liste de lecture devant être exportée
+*/
 void PanelExport::setPlaylist(Playlist* playlist)
 {
     this->playlist = playlist;
 }
 
+/**
+* setupActions
+* Permet de définir les connexions entres les différentes éléments du composant
+*/
 void PanelExport::setupActions()
 {
     connect(buttonChooseOutputFile, &QPushButton::pressed, this, &PanelExport::chooseOutputFile);
     connect(buttonExport, &QPushButton::pressed, this, &PanelExport::exportFiles);
 }
 
+/**
+* chooseOutputFile
+* Permet d'ouvrir une fenêtre afin de choisir le dossir de destination
+*/
 void PanelExport::chooseOutputFile()
 {
     QString outputFilePath = QFileDialog::getSaveFileName(this, "Save the xspf playlist", QString(), "*.xspf");
@@ -40,6 +65,10 @@ void PanelExport::chooseOutputFile()
     }
 }
 
+/**
+* Export files
+* Permet d'effectuer l'exportation des fichiers
+*/
 void PanelExport::exportFiles()
 {
     int count = playlist->getNumberOfTracks();

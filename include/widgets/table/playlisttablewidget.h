@@ -10,6 +10,12 @@ class AddTrackCommand;
 class MoveTrackCommand;
 class RemoveTrackCommand;
 
+/**
+* Widget permettant d'afficher la liste de lecture sous forme d'une table.
+*
+* @author	Malik Fleury
+* @version	1
+*/
 class PlaylistTableWidget : public QTableWidget
 {
 public:

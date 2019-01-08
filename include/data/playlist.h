@@ -5,6 +5,12 @@
 #include <QList>
 #include "include/data/track.h"
 
+/**
+* Classe de liste de lecture
+*
+* @author	Malik Fleury
+* @version	1
+*/
 class Playlist
 {
 public:

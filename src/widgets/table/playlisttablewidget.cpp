@@ -1,5 +1,11 @@
 #include "include/widgets/table/playlisttablewidget.h"
 
+/**
+* PlaylistTableWidget
+* Constructeur par défaut
+*
+* @param QWidget* parent : Parent
+*/
 PlaylistTableWidget::PlaylistTableWidget(QWidget* parent): QTableWidget(parent)
 {
     this->playlist = nullptr;
@@ -9,11 +15,21 @@ PlaylistTableWidget::PlaylistTableWidget(QWidget* parent): QTableWidget(parent)
     setupFormats();
 }
 
+/**
+* ~PlaylistTableWidget
+* Destructeur par défaut
+*/
 PlaylistTableWidget::~PlaylistTableWidget()
 {
 
 }
 
+/**
+* fill
+* Permet de remplir la table avec la liste de lecture passé en paramètre
+*
+* @param Playlist* playlist : liste de lecture à afficher
+*/
 void PlaylistTableWidget::fill(Playlist* playlist)
 {
     this->playlist = playlist;
@@ -25,6 +41,13 @@ void PlaylistTableWidget::fill(Playlist* playlist)
     }
 }
 
+/**
+* addTrack
+* Permet d'ajouter un média dans la table et dans les données à une certaine position (par défaut : à la suite)
+*
+* @param Track* track : média à ajouter
+* @param int position : position où ajouter le média
+*/
 void PlaylistTableWidget::addTrack(Track* track, int position)
 {
     int totalHeaders = this->columnCount();
@@ -40,6 +63,10 @@ void PlaylistTableWidget::addTrack(Track* track, int position)
     playlist->addTrack(track);
 }
 
+/**
+* removeSelectedTracks
+* Permet de supprimer les fichiers sélectionner dans la table
+*/
 void PlaylistTableWidget::removeSelectedTracks()
 {
     int totalColumn = this->columnCount();
@@ -60,12 +87,25 @@ void PlaylistTableWidget::removeSelectedTracks()
     redoNumberOfSteps.clear();
 }
 
+/**
+* removeTrack
+* Permet de supprimer un média à la ligne spécifiée
+*
+* @param int row : Ligne du média a supprimer dans la table
+*/
 void PlaylistTableWidget::removeTrack(int row)
 {
     this->removeRow(row);
     playlist->removeTrack(row);
 }
 
+/**
+* moveTrack
+* Permet de déplacer un média à une autre position
+*
+* @param int rowFrom : Ligne du média avant déplacement
+* @param int rowTo : Ligne du média après déplacement
+*/
 void PlaylistTableWidget::moveTrack(int rowFrom, int rowTo)
 {
     playlist->move(rowFrom, rowTo);
@@ -76,16 +116,34 @@ void PlaylistTableWidget::moveTrack(int rowFrom, int rowTo)
     this->setRow(rowTo, rowItems);
 }
 
+/**
+* dragEnterEvent
+* Event
+*
+* @param QDragEnterEvent* event :
+*/
 void PlaylistTableWidget::dragEnterEvent(QDragEnterEvent* event)
 {
     event->acceptProposedAction();
 }
 
+/**
+* dragMoveEvent
+* Event
+*
+* @param QDragMoveEvent* event :
+*/
 void PlaylistTableWidget::dragMoveEvent(QDragMoveEvent* event)
 {
     event->accept();
 }
 
+/**
+* dropEvent
+* Permet d'ajouter des fichiers ou de déplacer des fichiers existants déjà dans la table
+*
+* @param QDropEvent* event :
+*/
 void PlaylistTableWidget::dropEvent(QDropEvent* event)
 {
     if(event->source() == this)
@@ -99,6 +157,10 @@ void PlaylistTableWidget::dropEvent(QDropEvent* event)
     }
 }
 
+/**
+* undo
+* Permet de revenir en arrière
+*/
 void PlaylistTableWidget::undo()
 {
     if(commandStack.canUndo())
@@ -113,6 +175,10 @@ void PlaylistTableWidget::undo()
     }
 }
 
+/**
+* redo
+* Permet de revenir en avant
+*/
 void PlaylistTableWidget::redo()
 {
     if(commandStack.canRedo())
@@ -127,6 +193,12 @@ void PlaylistTableWidget::redo()
     }
 }
 
+/**
+* updateOutputFields
+* Permet d'ajouter des informations complémentaires dans la table lorsque le fichier de sortie est définit
+*
+* @param QString playlistOutputFilePath : chemin de sortie du fichier XSPF
+*/
 void PlaylistTableWidget::updateOutputFields(QString playlistOutputFilePath)
 {
     int columnOutputAbsFilePath = 2;
@@ -143,6 +215,13 @@ void PlaylistTableWidget::updateOutputFields(QString playlistOutputFilePath)
     }
 }
 
+/**
+* addRow
+* Permet d'ajouter une nouvelle ligne dans la table
+*
+* @param Track* track : Média à afficher
+* @param int rowNumber : Ligne à laquelle positionner le média
+*/
 void PlaylistTableWidget::addRow(Track* track, int rowNumber)
 {
     // If -1 and smaller, add the track to the end
@@ -164,6 +243,13 @@ void PlaylistTableWidget::addRow(Track* track, int rowNumber)
     this->setItem(rowNumber, 3, outputRelFilePathItem);
 }
 
+/**
+* setRow
+* .
+*
+* @param int row : Ligne
+* @param const QList<QTableWidgetItem*>& rowItems : Cellules de la table
+*/
 void PlaylistTableWidget::setRow(int row, const QList<QTableWidgetItem*>& rowItems)
 {
     for (int currentColumn = 0; currentColumn < columnCount(); ++currentColumn)
@@ -182,6 +268,10 @@ QList<QTableWidgetItem*> PlaylistTableWidget::takeRow(int row)
     return rowItems;
 }
 
+/**
+* configureHeaders
+* Permet de configurer les entêtes de la table
+*/
 void PlaylistTableWidget::configureHeaders()
 {
     QStringList headers;
@@ -195,6 +285,10 @@ void PlaylistTableWidget::configureHeaders()
     this->setHorizontalHeaderLabels(headers);
 }
 
+/**
+* configureTable
+* Permet de configurer les différents options de la table
+*/
 void PlaylistTableWidget::configureTable()
 {
     this->horizontalHeader()->setSectionsMovable(true);
@@ -211,6 +305,10 @@ void PlaylistTableWidget::configureTable()
     this->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
+/**
+* setupFormats
+* Permet de définir les formats acceptés
+*/
 void PlaylistTableWidget::setupFormats()
 {
     listFormats.append("mp3");
@@ -219,6 +317,12 @@ void PlaylistTableWidget::setupFormats()
     listFormats.append("m3u8");
 }
 
+/**
+* move
+* Permet de déplacer un média dans la table (maj graphique et données)
+*
+* @param QDropEvent* event : Evénement lié à une action DROP
+*/
 void PlaylistTableWidget::move(QDropEvent* event)
 {
     QModelIndexList selectionIndexes = this->selectedIndexes();
@@ -246,6 +350,12 @@ void PlaylistTableWidget::move(QDropEvent* event)
     event->accept();
 }
 
+/**
+* addTracksFromOutside
+* Permet d'ajouter des fichiers depuis l'extérieur du logiciel (glisser/déposer depuis le bureau par exemple)
+*
+* @param QDropEvent* event : Evénement lié à une action DROP
+*/
 void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
 {
     const QMimeData* mimeData = event->mimeData();
@@ -294,6 +404,13 @@ void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
     }
 }
 
+/**
+* addTrackDragAndDrop
+* Permet d'ajouter des fichiers via drag'n'drop
+*
+* @param QFileInfo& fileInfo : Information concernant le fichier à ajouter dans la table et dans les données
+* @param int rowTo : Ligne où ajouter le média
+*/
 void PlaylistTableWidget::addTrackDragAndDrop(QFileInfo& fileInfo, int rowTo)
 {
     if(fileInfo.isFile() && listFormats.contains(fileInfo.suffix()))
@@ -312,50 +429,3 @@ void PlaylistTableWidget::addTrackDragAndDrop(QFileInfo& fileInfo, int rowTo)
         commandStack.redo();
     }
 }
-
-/*
-void PlaylistTableWidget::addTracksFromOutside(QDropEvent* event)
-{
-    QFileInfo fileInfo;
-    const QMimeData* mimeData = event->mimeData();
-    int rowTo = this->rowAt(event->pos().y());
-    int numberOfFilesAdded = 0;
-
-    for(QUrl url: mimeData->urls())
-    {
-        QString urlStr = url.toString();
-        fileInfo.setFile(urlStr);
-
-        if(listFormats.contains(fileInfo.suffix()))
-        {
-            QString absoluteFilePath = urlStr.replace("file:///", "");
-
-            Track* track = new Track(absoluteFilePath);
-
-            if(rowTo >= 0)
-            {
-                commandStack.push(new AddTrackCommand(this, *track, rowTo++));
-            }
-            else
-            {
-                int row = rowCount();
-                commandStack.push(new AddTrackCommand(this, *track, row));
-            }
-            commandStack.redo();
-
-            numberOfFilesAdded++;
-        }
-    }
-
-    if(numberOfFilesAdded > 0)
-    {
-        undoNumberOfSteps.push(numberOfFilesAdded);
-        redoNumberOfSteps.clear();
-        event->acceptProposedAction();
-    }
-    else
-    {
-        event->ignore();
-    }
-}
-*/

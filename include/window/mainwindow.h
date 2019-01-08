@@ -9,6 +9,12 @@
 #include "include/widgets/table/playlisttablewidget.h"
 #include "include/widgets/panelexport.h"
 
+/**
+* Classe représentant la fenêtre principale de l'application
+*
+* @author	Malik Fleury
+* @version	1
+*/
 class MainWindow : public QMainWindow, public Ui::MainWindow
 {
     Q_OBJECT

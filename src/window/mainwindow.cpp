@@ -1,5 +1,11 @@
 #include "include/window/mainwindow.h"
 
+/**
+* MainWindow
+* Constructeur par défaut de la fenêtre
+*
+* @param QWidget* parent: parent
+*/
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent)
 {
@@ -15,10 +21,18 @@ MainWindow::MainWindow(QWidget *parent) :
     enableWidgets(false);
 }
 
+/**
+* ~MainWindow
+* Destructeur par défaut
+*/
 MainWindow::~MainWindow()
 {
 }
 
+/**
+* setupMenuAction
+* Permet de mettre en place les menus
+*/
 void MainWindow::setupMenuActions()
 {
     // File
@@ -43,29 +57,51 @@ void MainWindow::setupMenuActions()
     connect(menuHelpAbout, &QAction::triggered, this, &MainWindow::about);
 }
 
+/**
+* setupOtherEvents
+* Permet de mettre en place les connexions d'autres composants
+*/
 void MainWindow::setupOtherEvents()
 {
     connect(panelExport, &PanelExport::playlistOutputUpdated, playlistTable, &PlaylistTableWidget::updateOutputFields);
 }
 
+/**
+* setupPlaylistTable
+* Permet de mettre en place la table comportant la liste de lecture
+*/
 void MainWindow::setupPlaylistTable()
 {
     this->playlistTable = new PlaylistTableWidget(this);
     this->centralWidget()->layout()->addWidget(playlistTable);
 }
 
+/**
+* setupPanelExport
+* Permet de mettre en place le panneau d'exportation
+*/
 void MainWindow::setupPanelExport()
 {
     this->panelExport = new PanelExport(this);
     this->centralWidget()->layout()->addWidget(panelExport);
 }
 
+/**
+* enableWidgets
+* Permet d'activer ou désactiver la table et le panneau d'exportation
+*
+* @param enable : activer/désactiver les widgets
+*/
 void MainWindow::enableWidgets(bool enable)
 {
     this->playlistTable->setEnabled(enable);
     this->panelExport->setEnabled(enable);
 }
 
+/**
+* newFile
+* Permet de créer un nouveau fichier
+*/
 void MainWindow::newFile()
 {
     this->freeMemoryPlaylist();
@@ -75,6 +111,10 @@ void MainWindow::newFile()
     this->enableWidgets(true);
 }
 
+/**
+* open
+* Permet d'ouvrir un fichier
+*/
 void MainWindow::open()
 {
     QString fileToOpen = QFileDialog::getOpenFileName(this, "Open xspf playlist", QString(), "*.xspf");
@@ -94,6 +134,10 @@ void MainWindow::open()
     this->enableWidgets(true);
 }
 
+/**
+* save
+* Permet de sauvegarder un fichier, si aucune sauvegarde n'a été faite, une fenêtre s'ouvre afin de demander la destination
+*/
 void MainWindow::save()
 {
     // If the path is not already set, we ask to the user where to save
@@ -107,6 +151,10 @@ void MainWindow::save()
     }
 }
 
+/**
+* saveAs
+* Permet de sauvegarder le fichier à un emplacement bien définit
+*/
 void MainWindow::saveAs()
 {
     QString fileToSave = QFileDialog::getSaveFileName(this, "Save the xspf playlist", QString(), "*.xspf");
@@ -118,6 +166,12 @@ void MainWindow::saveAs()
     }
 }
 
+/**
+* loadLanguage
+* Permet de charger un fichier de langue
+*
+* @param QString languageFile : nom du fichier de langue
+*/
 void MainWindow::loadLanguage(const QString& languageFile)
 {
     QApplication* app = (QApplication*)QApplication::instance();
@@ -129,6 +183,12 @@ void MainWindow::loadLanguage(const QString& languageFile)
     this->panelExport->retranslateUi(panelExport);
 }
 
+/**
+* changeLanguage
+* Permet de changer la langue de l'application
+*
+* @param QAction* action : action qui a été pressée
+*/
 void MainWindow::changeLanguage(QAction* action)
 {
     if(action == actionFrench)
@@ -141,11 +201,19 @@ void MainWindow::changeLanguage(QAction* action)
     }
 }
 
+/**
+* about
+* Permet d'afficher une fenêtre d'information sur le programme
+*/
 void MainWindow::about()
 {
     QMessageBox::about(this, "XSPF-Manager", "Auteur: Malik Fleury \nVersion: 1");
 }
 
+/**
+* freeMemoryPlaylist
+* Permet de libérer la mémoie de la liste de lecture
+*/
 void MainWindow::freeMemoryPlaylist()
 {
     if(this->playlist != nullptr)
