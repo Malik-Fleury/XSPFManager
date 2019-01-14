@@ -215,6 +215,61 @@ void PlaylistTableWidget::updateOutputFields(QString playlistOutputFilePath)
     }
 }
 
+void PlaylistTableWidget::sortColumn(int logicalIndex)
+{
+    qDebug() << "OK";
+}
+
+void PlaylistTableWidget::sortChanged(int logicalIndex, Qt::SortOrder order)
+{
+    switch(logicalIndex)
+    {
+        case 0:
+            if(order == Qt::AscendingOrder)
+            {
+                playlist->sort(Sorting::FILENAME);
+            }
+            else
+            {
+                playlist->sort(Sorting::FILENAME, true);
+            }
+            break;
+        case 1:
+            if(order == Qt::AscendingOrder)
+            {
+                playlist->sort(Sorting::ABSOLUTE_FILE_PATH);
+            }
+            else
+            {
+                playlist->sort(Sorting::ABSOLUTE_FILE_PATH, true);
+            }
+            break;
+        case 2:
+            if(order == Qt::AscendingOrder)
+            {
+                playlist->sort(Sorting::OUTPUT_ABSOLUTE_FILE_PATH);
+            }
+            else
+            {
+                playlist->sort(Sorting::OUTPUT_ABSOLUTE_FILE_PATH, true);
+            }
+            break;
+        case 3:
+            if(order == Qt::AscendingOrder)
+            {
+                playlist->sort(Sorting::OUTPUT_RELATIVE_FILE_PATH);
+            }
+            else
+            {
+                playlist->sort(Sorting::OUTPUT_RELATIVE_FILE_PATH, true);
+            }
+            break;
+    }
+
+    this->setRowCount(0);
+    this->fill(this->playlist);
+}
+
 /**
 * addRow
 * Permet d'ajouter une nouvelle ligne dans la table
@@ -303,6 +358,10 @@ void PlaylistTableWidget::configureTable()
     this->setSelectionBehavior(QAbstractItemView::SelectRows);
     this->setShowGrid(false);
     this->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    this->horizontalHeader()->setSortIndicatorShown(true);
+
+    //connect(this->horizontalHeader(), &QHeaderView::sectionClicked, this, &PlaylistTableWidget::sortColumn);
+    connect(this->horizontalHeader(), &QHeaderView::sortIndicatorChanged, this, &PlaylistTableWidget::sortChanged);
 }
 
 /**

@@ -156,6 +156,53 @@ void Playlist::move(int from, int to)
     this->tracksList.move(from, to);
 }
 
+void Playlist::sort(Sorting sorting, bool descending)
+{
+    switch(sorting)
+    {
+        case FILENAME:
+            if(!descending)
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareFilename);
+            }
+            else
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareFilenameDescending);
+            }
+            break;
+        case ABSOLUTE_FILE_PATH:
+            if(!descending)
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareAbsolutePath);
+            }
+            else
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareAbsolutePathDescending);
+            }
+            break;
+        case OUTPUT_ABSOLUTE_FILE_PATH:
+            if(!descending)
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareAbsoluteOutputPath);
+            }
+            else
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareAbsoluteOutputPathDescending);
+            }
+            break;
+        case OUTPUT_RELATIVE_FILE_PATH:
+            if(!descending)
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareRelativeOutputPath);
+            }
+            else
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareRelativeOutputPathDescending);
+            }
+            break;
+    }
+}
+
 /**
 * getConstBegin
 * Permet d'obtenir l'itérateur de début de liste
