@@ -222,14 +222,52 @@ void PlaylistTableWidget::sortColumn(int logicalIndex)
 
 void PlaylistTableWidget::sortChanged(int logicalIndex, Qt::SortOrder order)
 {
-    qDebug() << "test";
-    playlist->sort(Sorting::FILENAME);
-
-    for(auto itr = playlist->getConstBegin(); itr != playlist->getConstEnd(); itr++)
+    switch(logicalIndex)
     {
-        Track* track = (Track*)*itr;
-        qDebug() << track->getFilename();
+        case 0:
+            if(order == Qt::AscendingOrder)
+            {
+                playlist->sort(Sorting::FILENAME);
+            }
+            else
+            {
+                playlist->sort(Sorting::FILENAME, true);
+            }
+            break;
+        case 1:
+            if(order == Qt::AscendingOrder)
+            {
+                playlist->sort(Sorting::ABSOLUTE_FILE_PATH);
+            }
+            else
+            {
+                playlist->sort(Sorting::ABSOLUTE_FILE_PATH, true);
+            }
+            break;
+        case 2:
+            if(order == Qt::AscendingOrder)
+            {
+                playlist->sort(Sorting::OUTPUT_ABSOLUTE_FILE_PATH);
+            }
+            else
+            {
+                playlist->sort(Sorting::OUTPUT_ABSOLUTE_FILE_PATH, true);
+            }
+            break;
+        case 3:
+            if(order == Qt::AscendingOrder)
+            {
+                playlist->sort(Sorting::OUTPUT_RELATIVE_FILE_PATH);
+            }
+            else
+            {
+                playlist->sort(Sorting::OUTPUT_RELATIVE_FILE_PATH, true);
+            }
+            break;
     }
+
+    this->setRowCount(0);
+    this->fill(this->playlist);
 }
 
 /**
