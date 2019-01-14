@@ -370,7 +370,7 @@ void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
         // If the url is a folder, use QDirIterator to look for files recursively
         if(fileInfo.isDir())
         {
-            QDirIterator it(fileInfo.filePath(), QStringList() << "*.m3u8", QDir::Files, QDirIterator::Subdirectories);
+            QDirIterator it(fileInfo.filePath(), QStringList() << "*.flac", QDir::Files, QDirIterator::Subdirectories);
             QFileInfo currentFileInfo;
 
             while(it.hasNext())
