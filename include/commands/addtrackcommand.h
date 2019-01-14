@@ -6,6 +6,13 @@
 #include "include/data/track.h"
 #include "include/widgets/table/playlisttablewidget.h"
 
+/**
+* Classe de commande permettant d'ajouter ou retirer un média de la liste de lecture.
+* Elle est utilisée dans le cas du undo/redo.
+*
+* @author	Malik Fleury
+* @version	1
+*/
 class AddTrackCommand : public QUndoCommand
 {
 public:

@@ -8,6 +8,12 @@
 #include <QFileInfo>
 #include <QDebug>
 
+/**
+* Classe représentant un média
+*
+* @author	Malik Fleury
+* @version	1
+*/
 class Track
 {
 public:

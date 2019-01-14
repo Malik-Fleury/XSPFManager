@@ -4,6 +4,13 @@
 #include <QUndoCommand>
 #include "include/widgets/table/playlisttablewidget.h"
 
+/**
+* Classe de commande permettant de modifier la position du média dans la liste de lecture.
+* Elle est utilisée dans le cas du undo/redo.
+*
+* @author	Malik Fleury
+* @version	1
+*/
 class MoveTrackCommand : public QUndoCommand
 {
 public:

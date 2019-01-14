@@ -2,24 +2,50 @@
 
 using namespace pugi;
 
+/**
+* Xspf
+* Constructeur par défaut
+*/
 Xspf::Xspf()
 {
 }
 
+/**
+* Xspf
+* Constructeur surchargé : chemin au fichier (à charger ou à enregistrer)
+*
+* @param QString filePath : chemin au fichier (à charger ou à enregistrer)
+*/
 Xspf::Xspf(QString filePath): fileInfo(filePath)
 {
     open(filePath);
 }
 
+/**
+* Xspf
+* Constructeur de copie
+*
+* @param Xspf& xspfSource: xspf à recopier
+*/
 Xspf::Xspf(Xspf& xspfSource)
 {
     this->fileInfo = xspfSource.fileInfo;
 }
 
+/**
+* ~Xspf
+* Destructeur par défaut
+*/
 Xspf::~Xspf()
 {
 }
 
+/**
+* open
+* Permet d'ouvrir un fichier s'il existe ou alors de le créer s'il n'existe pas
+*
+* @param QString filePath : chemin au fichier
+*/
 void Xspf::open(QString filePath)
 {
     doc.reset();
@@ -31,6 +57,12 @@ void Xspf::open(QString filePath)
     }
 }
 
+/**
+* removeFileTag
+* Permet de supprimer le tag "file:///"
+*
+* @param QString path : chemin contenant le tag
+*/
 void Xspf::removeFileTag(QString& path)
 {
     if(path.contains("file:///"))
@@ -39,11 +71,23 @@ void Xspf::removeFileTag(QString& path)
     }
 }
 
+/**
+* addFileTag
+* Permet d'ajouter le tag "file:///"
+*
+* @param QString path : chemin auquel ajouter le tag
+*/
 void Xspf::addFileTag(QString& path)
 {
     path = "file:///" + path;
 }
 
+/**
+* readPlaylist
+* Permet de lire un fichier au format XSPF
+*
+* @return Liste de lecture correspondant au fichier XSPF
+*/
 Playlist* Xspf::readPlaylist()
 {
     Playlist* playlist = new Playlist(this->getBaseUri());
@@ -54,6 +98,12 @@ Playlist* Xspf::readPlaylist()
     return playlist;
 }
 
+/**
+* getBaseUri
+* Permet d'obtenir l'URI de base dans le fichier XSPF (si existant)
+*
+* @return URI de base se trouvant dans le fichier XSPF
+*/
 QString Xspf::getBaseUri()
 {
     xml_attribute baseUriAttribute = doc.select_node("/playlist").node().attribute("xml:base");
@@ -62,6 +112,13 @@ QString Xspf::getBaseUri()
     return baseUri;
 }
 
+/**
+* getTracks
+* Permet de lire les médias dans le fichier XSPF et les ajoute dans la liste de lecture (Playlist)
+*
+* @param QString filePath : chemin du fichier XSPF à ouvrir
+* @param Playlist& playlist: liste de lecture à remplir
+*/
 void Xspf::getTracks(QString& filePath, Playlist& playlist)
 {
     xpath_node_set trackXPathNodesSet = doc.select_nodes("/playlist/trackList/track");
@@ -85,6 +142,14 @@ void Xspf::getTracks(QString& filePath, Playlist& playlist)
     }
 }
 
+/**
+* savePlaylist
+* Permet de sauvegarder une liste de lecture en fichier XSPF
+*
+* @param QString filePath : chemin du fichier de sortie
+* @param Paylist& playlist: liste de lecture à sauvegarder
+* @param bool absolute: permet d'enregistrer les chemins absolus des médias
+*/
 void Xspf::savePlaylist(QString filePath, Playlist& playlist, bool absolute)
 {
     QFileInfo fileDestInfo(filePath);

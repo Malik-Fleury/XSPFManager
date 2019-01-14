@@ -13,6 +13,12 @@ enum Sorting
     RELATIVE_FILE_PATH = 2
 };
 
+/**
+* Classe de liste de lecture
+*
+* @author	Malik Fleury
+* @version	1
+*/
 class Playlist
 {
 public:
