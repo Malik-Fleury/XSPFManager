@@ -156,16 +156,49 @@ void Playlist::move(int from, int to)
     this->tracksList.move(from, to);
 }
 
-void Playlist::sort(Sorting sorting)
+void Playlist::sort(Sorting sorting, bool descending)
 {
     switch(sorting)
     {
         case FILENAME:
-            std::sort(tracksList.begin(), tracksList.end(), Comparators::compareFilename);
+            if(!descending)
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareFilename);
+            }
+            else
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareFilenameDescending);
+            }
             break;
         case ABSOLUTE_FILE_PATH:
+            if(!descending)
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareAbsolutePath);
+            }
+            else
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareAbsolutePathDescending);
+            }
             break;
-        case RELATIVE_FILE_PATH:
+        case OUTPUT_ABSOLUTE_FILE_PATH:
+            if(!descending)
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareAbsoluteOutputPath);
+            }
+            else
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareAbsoluteOutputPathDescending);
+            }
+            break;
+        case OUTPUT_RELATIVE_FILE_PATH:
+            if(!descending)
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareRelativeOutputPath);
+            }
+            else
+            {
+                std::sort(tracksList.begin(), tracksList.end(), Comparators::compareRelativeOutputPathDescending);
+            }
             break;
     }
 }

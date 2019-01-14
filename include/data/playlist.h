@@ -10,7 +10,8 @@ enum Sorting
 {
     FILENAME = 0,
     ABSOLUTE_FILE_PATH = 1,
-    RELATIVE_FILE_PATH = 2
+    OUTPUT_ABSOLUTE_FILE_PATH = 2,
+    OUTPUT_RELATIVE_FILE_PATH = 3
 };
 
 /**
@@ -36,7 +37,7 @@ public:
     int getNumberOfTracks();
     bool existsBaseUri();
     void move(int from, int to);
-    void sort(Sorting sorting);
+    void sort(Sorting sorting, bool descending = false);
 
     QList<Track*>::const_iterator getConstIterator();
     QList<Track*>::const_iterator getConstBegin();
