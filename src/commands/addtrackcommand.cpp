@@ -22,7 +22,6 @@ AddTrackCommand::AddTrackCommand(PlaylistTableWidget* playlistTable, Track& trac
 */
 AddTrackCommand::~AddTrackCommand()
 {
-
 }
 
 /**

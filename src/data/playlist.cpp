@@ -119,6 +119,9 @@ void Playlist::removeTrack(Track* track)
 */
 void Playlist::removeTrack(int position)
 {
+    Track* track = tracksList.at(position);
+    delete track;
+
     this->tracksList.removeAt(position);
 }
 
