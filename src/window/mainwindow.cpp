@@ -225,8 +225,3 @@ void MainWindow::freeMemoryPlaylist()
         playlist = nullptr;
     }
 }
-
-void MainWindow::dropEventHandler(QDropEvent* event)
-{
-
-}

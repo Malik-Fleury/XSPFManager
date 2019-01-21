@@ -52,7 +52,6 @@ void PlaylistTableWidget::fill(Playlist* playlist)
 */
 void PlaylistTableWidget::addTrack(Track* track, int position)
 {
-    int totalHeaders = this->columnCount();
     int rowNumber = position;
 
     // If -1 and smaller, add the track to the end
@@ -216,11 +215,6 @@ void PlaylistTableWidget::updateOutputFields(QString playlistOutputFilePath)
         itemOutputAbsFilePath->setText(playlistOutputFilePath + "/" + track->getOutputRelativeFilePath());
         itemOutputRelFilePath->setText(track->getOutputRelativeFilePath());
     }
-}
-
-void PlaylistTableWidget::sortColumn(int logicalIndex)
-{
-    qDebug() << "OK";
 }
 
 void PlaylistTableWidget::sortChanged(int logicalIndex, Qt::SortOrder order)

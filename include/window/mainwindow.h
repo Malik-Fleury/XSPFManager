@@ -42,9 +42,6 @@ private:
 
     void freeMemoryPlaylist();
 
-private slots:
-    void dropEventHandler(QDropEvent* event);
-
 private:
     QActionGroup* languagesActGroup;
     PlaylistTableWidget* playlistTable;

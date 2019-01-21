@@ -43,7 +43,6 @@ public slots:
     void redo();
 
     void updateOutputFields(QString playlistOutputFilePath);
-    void sortColumn(int logicalIndex);
     void sortChanged(int logicalIndex, Qt::SortOrder order);
 
 
