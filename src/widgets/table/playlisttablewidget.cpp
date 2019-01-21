@@ -372,10 +372,10 @@ void PlaylistTableWidget::configureTable()
 */
 void PlaylistTableWidget::setupFormats()
 {
-    listFormats.append("mp3");
-    listFormats.append("flac");
-    listFormats.append("wav");
-    listFormats.append("m3u8");
+    listFormats.append("*.mp3");
+    listFormats.append("*.flac");
+    listFormats.append("*.wav");
+    listFormats.append("*.m3u8");
 }
 
 /**
@@ -443,7 +443,7 @@ void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
         // If the url is a folder, use QDirIterator to look for files recursively
         if(fileInfo.isDir())
         {
-            QDirIterator it(fileInfo.filePath(), QStringList() << "*.flac", QDir::Files, QDirIterator::Subdirectories);
+            QDirIterator it(fileInfo.filePath(), listFormats, QDir::Files, QDirIterator::Subdirectories);
             QFileInfo currentFileInfo;
 
             while(it.hasNext())
@@ -486,7 +486,7 @@ void PlaylistTableWidget::addTracksFromOutside(QDropEvent *event)
 */
 void PlaylistTableWidget::addTrackDragAndDrop(QFileInfo& fileInfo, int rowTo)
 {
-    if(fileInfo.isFile() && listFormats.contains(fileInfo.suffix()))
+    if(fileInfo.isFile() && listFormats.contains("*." + fileInfo.suffix()))
     {
         QString absoluteFilePath = fileInfo.absoluteFilePath();
         Track* track = new Track(absoluteFilePath);
