@@ -128,6 +128,40 @@
         <source>French</source>
         <translation>French</translation>
     </message>
+    <message>
+        <location filename="src/window/mainwindow.cpp" line="161"/>
+        <source>Save the xspf playlist</source>
+        <translation>Save the xspf playlist</translation>
+    </message>
+    <message>
+        <location filename="src/window/mainwindow.cpp" line="211"/>
+        <source>Auteur: Malik Fleury 
+Version: 1</source>
+        <translation>Autor : Malik Fleury \n Version : 1</translation>
+    </message>
+</context>
+<context>
+    <name>PlaylistTableWidget</name>
+    <message>
+        <location filename="src/widgets/table/playlisttablewidget.cpp" line="333"/>
+        <source>Filename</source>
+        <translation>Filename</translation>
+    </message>
+    <message>
+        <location filename="src/widgets/table/playlisttablewidget.cpp" line="333"/>
+        <source>Input absolute path</source>
+        <translation>Input absolute path</translation>
+    </message>
+    <message>
+        <location filename="src/widgets/table/playlisttablewidget.cpp" line="333"/>
+        <source>Output absolute path</source>
+        <translation>Output absolute path</translation>
+    </message>
+    <message>
+        <location filename="src/widgets/table/playlisttablewidget.cpp" line="333"/>
+        <source>Output relative path</source>
+        <translation>Ouput relative path</translation>
+    </message>
 </context>
 <context>
     <name>panelExport</name>

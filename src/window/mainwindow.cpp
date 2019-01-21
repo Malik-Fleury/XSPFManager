@@ -158,7 +158,7 @@ void MainWindow::save()
 */
 void MainWindow::saveAs()
 {
-    QString fileToSave = QFileDialog::getSaveFileName(this, "Save the xspf playlist", QString(), "*.xspf");
+    QString fileToSave = QFileDialog::getSaveFileName(this, tr("Save the xspf playlist"), QString(), "*.xspf");
 
     if(!fileToSave.isEmpty())
     {
@@ -182,6 +182,8 @@ void MainWindow::loadLanguage(const QString& languageFile)
 
     this->retranslateUi(this);
     this->panelExport->retranslateUi(panelExport);
+
+    this->playlistTable->configureHeaders();
 }
 
 /**
@@ -208,7 +210,7 @@ void MainWindow::changeLanguage(QAction* action)
 */
 void MainWindow::about()
 {
-    QMessageBox::about(this, "XSPF-Manager", "Auteur: Malik Fleury \nVersion: 1");
+    QMessageBox::about(this, "XSPF-Manager", tr("Auteur: Malik Fleury \nVersion: 1"));
 }
 
 /**

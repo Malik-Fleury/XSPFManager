@@ -37,6 +37,7 @@ public slots:
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dragMoveEvent(QDragMoveEvent* event) override;
     void dropEvent(QDropEvent* event) override;
+    void changeEvent(QEvent* event) override;
 
     void undo();
     void redo();
@@ -45,8 +46,9 @@ public slots:
     void sortColumn(int logicalIndex);
     void sortChanged(int logicalIndex, Qt::SortOrder order);
 
-private:
+
     void configureHeaders();
+private:
     void configureTable();
     void setupFormats();
     void move(QDropEvent* event);

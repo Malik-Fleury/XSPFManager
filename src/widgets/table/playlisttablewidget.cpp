@@ -330,7 +330,9 @@ QList<QTableWidgetItem*> PlaylistTableWidget::takeRow(int row)
 void PlaylistTableWidget::configureHeaders()
 {
     QStringList headers;
-    headers << "Filename" << "Input absolute path" << "Output absolute path" << "Output relative path";
+    headers << tr("Filename") << tr("Input absolute path") << tr("Output absolute path") << tr("Output relative path");
+
+    this->setColumnCount(0);
 
     for(int counter = 0;counter < headers.size(); counter++)
     {
@@ -407,6 +409,18 @@ void PlaylistTableWidget::move(QDropEvent* event)
     undoNumberOfSteps.push(numberOfFiles);
     redoNumberOfSteps.clear();
     event->accept();
+}
+
+void PlaylistTableWidget::changeEvent(QEvent *event)
+{
+    QTableWidget::changeEvent(event);
+
+    if (event->type() == QEvent::LanguageChange)
+    {
+        qDebug() << "Changed language";
+
+        this->configureHeaders();
+    }
 }
 
 /**
