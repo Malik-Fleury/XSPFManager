@@ -65,7 +65,7 @@ void PlaylistTableWidget::addTrack(Track* track, int position)
 
 /**
 * removeSelectedTracks
-* Permet de supprimer les fichiers sélectionner dans la table
+* Permet de supprimer les fichiers sélectionnés dans la table
 */
 void PlaylistTableWidget::removeSelectedTracks()
 {
@@ -224,7 +224,7 @@ void PlaylistTableWidget::sortChanged(int logicalIndex, Qt::SortOrder order)
 {
     switch(logicalIndex)
     {
-        case 0:
+        case Sorting::FILENAME:
             if(order == Qt::AscendingOrder)
             {
                 playlist->sort(Sorting::FILENAME);
@@ -234,7 +234,7 @@ void PlaylistTableWidget::sortChanged(int logicalIndex, Qt::SortOrder order)
                 playlist->sort(Sorting::FILENAME, true);
             }
             break;
-        case 1:
+        case Sorting::ABSOLUTE_FILE_PATH:
             if(order == Qt::AscendingOrder)
             {
                 playlist->sort(Sorting::ABSOLUTE_FILE_PATH);
@@ -244,7 +244,7 @@ void PlaylistTableWidget::sortChanged(int logicalIndex, Qt::SortOrder order)
                 playlist->sort(Sorting::ABSOLUTE_FILE_PATH, true);
             }
             break;
-        case 2:
+        case Sorting::OUTPUT_ABSOLUTE_FILE_PATH:
             if(order == Qt::AscendingOrder)
             {
                 playlist->sort(Sorting::OUTPUT_ABSOLUTE_FILE_PATH);
@@ -254,7 +254,7 @@ void PlaylistTableWidget::sortChanged(int logicalIndex, Qt::SortOrder order)
                 playlist->sort(Sorting::OUTPUT_ABSOLUTE_FILE_PATH, true);
             }
             break;
-        case 3:
+        case Sorting::OUTPUT_RELATIVE_FILE_PATH:
             if(order == Qt::AscendingOrder)
             {
                 playlist->sort(Sorting::OUTPUT_RELATIVE_FILE_PATH);
