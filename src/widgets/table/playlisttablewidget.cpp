@@ -34,6 +34,8 @@ void PlaylistTableWidget::fill(Playlist* playlist)
 {
     this->playlist = playlist;
 
+    this->setRowCount(0);
+
     for(auto itr = playlist->getConstBegin(); itr != playlist->getConstEnd(); itr++)
     {
         Track* track = (Track*)*itr;
@@ -56,9 +58,10 @@ void PlaylistTableWidget::addTrack(Track* track, int position)
     // If -1 and smaller, add the track to the end
     if(rowNumber < 0)
     {
-        rowNumber = this->rowCount();
+        rowNumber = this->playlist->getNumberOfTracks();
     }
 
+    qDebug() << rowNumber;
     addRow(track, rowNumber);
     playlist->addTrack(track);
 }
