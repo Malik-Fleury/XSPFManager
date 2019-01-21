@@ -129,9 +129,10 @@ void MainWindow::open()
         // Add the data of the playlist to the table
         playlistTable->fill(playlist);
         panelExport->setPlaylist(playlist);
-    }
 
-    this->enableWidgets(true);
+        // Enable widgets
+        this->enableWidgets(true);
+    }
 }
 
 /**
