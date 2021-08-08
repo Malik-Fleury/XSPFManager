@@ -1,5 +1,5 @@
 # XSPFManager
-Tool to create/edite a music/video playlist as xspf format.
+Tool to create/edit a music/video playlist as xspf format.
 This project has been created during my third year of studies at HE-ARC in Neuchâtel.
 
 The project is abandoned and it will not be fixed.
